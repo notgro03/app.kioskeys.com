@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planes - Kioskeys</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .plan-features {
+      list-style: none;
+      margin: 20px 0;
+      padding: 0;
+    }
+
+    .plan-features li {
+      margin: 12px 0;
+      padding-left: 24px;
+      position: relative;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .plan-features li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 25px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-align: center;
+      width: 100%;
+      margin-top: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .price {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 16px 0;
+      color: white;
+    }
+
+    .price span {
+      font-size: 16px;
+      opacity: 0.8;
+    }
+
+    .feature-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 450px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      background: radial-gradient(circle at top right, rgba(255,255,255,0.1) 0%, transparent 60%);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Plan-specific styles with more professional colors */
+    .plan-personal {
+      background: linear-gradient(135deg, #34495e, #2c3e50);
+    }
+
+    .plan-premium {
+      background: linear-gradient(135deg, #003B8E, #00529B);
+      transform: scale(1.05);
+    }
+
+    .plan-empresa {
+      background: linear-gradient(135deg, #1F2937, #111827);
+    }
+
+    .plan-personalizado {
+      background: linear-gradient(135deg, #374151, #1F2937);
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: 16px;
+      right: -32px;
+      background: #E5E7EB;
+      color: #111827;
+      padding: 8px 40px;
+      transform: rotate(45deg);
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 16px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    h3 {
+      color: white;
+      font-size: 24px;
+      margin: 16px 0;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .feature-card {
+        transform: scale(1) !important;
+      }
+    }
+
+    .tutorial-button {
+      background: linear-gradient(135deg, #003B8E, #00529B);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <a href="/"><img src="/logo.svg" alt="Kioskeys"></a>
+    </div>
+    <div class="nav-links">
+      <a href="/">Inicio</a>
+      <a href="/pages/red-servicios.html">Red de Servicios</a>
+      <a href="/pages/planes.html">Planes</a>
+      <a href="/pages/productos.html">Productos</a>
+      <a href="/pages/contacto.html">Contacto</a>
+    </div>
+    <button class="menu-button">
+      <i class="fas fa-bars"></i>
+    </button>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Planes y Precios</h1>
+        <p>Encuentra el plan perfecto para ti</p>
+      </div>
+    </section>
+
+    <section class="main-content">
+      <div class="content-container">
+        <div class="features-grid">
+          <div class="feature-card plan-personal">
+            <div>
+              <i class="fas fa-user feature-icon"></i>
+              <h3>Plan Personal</h3>
+              <div class="price">$2.500<span>/mes</span></div>
+              <ul class="plan-features">
+                <li>2 copias virtuales</li>
+                <li>Almacenamiento seguro</li>
+                <li>Soporte básico</li>
+                <li>App móvil</li>
+              </ul>
+            </div>
+            <a href="/registro" class="button">Comenzar Ahora</a>
+          </div>
+
+          <div class="feature-card plan-premium">
+            <div class="popular-badge">MÁS POPULAR</div>
+            <div>
+              <i class="fas fa-crown feature-icon"></i>
+              <h3>Plan Premium</h3>
+              <div class="price">$4.500<span>/mes</span></div>
+              <ul class="plan-features">
+                <li>5 copias virtuales</li>
+                <li>Almacenamiento seguro</li>
+                <li>Soporte prioritario 24/7</li>
+                <li>30% descuento en duplicados</li>
+                <li>Respaldo en la nube</li>
+              </ul>
+            </div>
+            <a href="/registro" class="button">Elegir Premium</a>
+          </div>
+
+          <div class="feature-card plan-empresa">
+            <div>
+              <i class="fas fa-building feature-icon"></i>
+              <h3>Plan Empresa</h3>
+              <div class="price">$9.900<span>/mes</span></div>
+              <ul class="plan-features">
+                <li>Copias ilimitadas</li>
+                <li>Soporte técnico dedicado</li>
+                <li>Panel de administración</li>
+                <li>API de integración</li>
+                <li>Usuarios ilimitados</li>
+              </ul>
+            </div>
+            <a href="/contacto" class="button">Contactar Ventas</a>
+          </div>
+
+          <div class="feature-card plan-personalizado">
+            <div>
+              <i class="fas fa-handshake feature-icon"></i>
+              <h3>Plan Personalizado</h3>
+              <div class="price">Consultar<span></span></div>
+              <ul class="plan-features">
+                <li>Soluciones a medida</li>
+                <li>Integración personalizada</li>
+                <li>Soporte dedicado VIP</li>
+                <li>Características personalizadas</li>
+                <li>SLA garantizado</li>
+              </ul>
+            </div>
+            <a href="/contacto" class="button">Solicitar Propuesta</a>
+          </div>
+        </div>
+
+        <a href="#pagos" class="tutorial-button">
+          <i class="fas fa-credit-card"></i>
+          Ver Métodos de Pago Disponibles
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="/main.js"></script>
+</body>
+</html>
