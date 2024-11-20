@@ -2,7 +2,7 @@
 const theme = localStorage.getItem('theme') || 'light';
 document.documentElement.setAttribute('data-theme', theme);
 
-// Navegación con efecto de scroll
+// Navigation with scroll effect
 let lastScrollY = window.scrollY;
 const nav = document.querySelector('nav');
 const hero = document.querySelector('.hero');
@@ -20,8 +20,35 @@ themeToggle.addEventListener('click', () => {
 });
 nav.insertBefore(themeToggle, nav.firstChild);
 
+// Mobile menu functionality
+const menuButton = document.querySelector('.menu-button');
+const navLinks = document.querySelector('.nav-links');
+
+if (menuButton && navLinks) {
+  menuButton.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    menuButton.classList.toggle('active');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!nav.contains(e.target) && navLinks.classList.contains('active')) {
+      navLinks.classList.remove('active');
+      menuButton.classList.remove('active');
+    }
+  });
+
+  // Close menu when clicking a link
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+      menuButton.classList.remove('active');
+    });
+  });
+}
+
 window.addEventListener('scroll', () => {
-  // Ocultar/mostrar nav al hacer scroll
+  // Hide/show nav on scroll
   if (window.scrollY > lastScrollY) {
     nav.classList.add('nav-hidden');
   } else {
@@ -29,7 +56,7 @@ window.addEventListener('scroll', () => {
   }
   lastScrollY = window.scrollY;
 
-  // Efecto parallax en hero
+  // Parallax effect on hero
   if (hero && window.scrollY > 50) {
     hero.classList.add('scrolled');
   } else if (hero) {
@@ -37,13 +64,13 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// Configuración del observador para animaciones
+// Animation observer configuration
 const observerOptions = {
   threshold: 0.1,
   rootMargin: '0px 0px -50px 0px'
 };
 
-// Observador compartido para todas las animaciones
+// Shared observer for all animations
 const sharedObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -52,21 +79,21 @@ const sharedObserver = new IntersectionObserver((entries) => {
   });
 }, observerOptions);
 
-// Función para inicializar animaciones
+// Function to initialize animations
 function initializeAnimations() {
-  // Seleccionar todas las tarjetas que necesitan animación
+  // Select all cards that need animation
   const cards = document.querySelectorAll('.feature-card, .product-card, .service-card, .tutorial-button, .step-card, .brand-card');
   
-  // Observar cada tarjeta
+  // Observe each card
   cards.forEach((card, index) => {
     if (card) {
-      // Aplicar delay escalonado
+      // Apply staggered delay
       card.style.transitionDelay = `${index * 100}ms`;
-      // Observar para animación
+      // Observe for animation
       sharedObserver.observe(card);
     }
   });
 }
 
-// Inicializar cuando el DOM esté listo
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', initializeAnimations);
