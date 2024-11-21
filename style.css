@@ -17,13 +17,6 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Dark mode variables */
-[data-theme="dark"] {
-  --background: #1a1a1a;
-  --text-color: #ffffff;
-  --card-gradient: linear-gradient(135deg, #004d8c, #0088e0);
-}
-
 /* Navigation */
 nav {
   position: fixed;
@@ -43,12 +36,7 @@ nav {
   padding: 0 32px;
   box-shadow: 0 8px 32px rgba(0, 59, 142, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-[data-theme="dark"] nav {
-  background: rgba(26, 26, 26, 0.9);
-  border-color: rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease;
 }
 
 nav.nav-hidden {
@@ -129,11 +117,6 @@ nav.nav-hidden {
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
-  [data-theme="dark"] .nav-links {
-    background: rgba(26, 26, 26, 0.98);
-    border-color: rgba(255, 255, 255, 0.05);
-  }
-
   .nav-links.active {
     transform: translateY(0);
     opacity: 1;
@@ -148,7 +131,6 @@ nav.nav-hidden {
   }
 }
 
-/* Rest of your existing styles remain exactly the same */
 @keyframes shine {
   from {
     transform: translateX(-100%) rotate(45deg);
@@ -208,7 +190,6 @@ body {
   color: var(--text-color);
   position: relative;
   overflow-x: hidden;
-  transition: background-color 0.3s ease, color 0.3s ease;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -226,21 +207,6 @@ body::before {
   opacity: 0.05;
   z-index: -1;
   transform: translate(30%, -30%);
-}
-
-/* Theme Toggle Button */
-.theme-toggle {
-  background: none;
-  border: none;
-  color: var(--text-color);
-  cursor: pointer;
-  padding: 8px;
-  font-size: 20px;
-  transition: transform 0.3s ease;
-}
-
-.theme-toggle:hover {
-  transform: scale(1.1);
 }
 
 /* Hero Section */
