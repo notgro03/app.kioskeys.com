@@ -59,76 +59,131 @@
       margin-bottom: 12px;
     }
 
-    .brand-models {
-      font-size: 13px;
-      color: #6e6e73;
-      margin-top: 8px;
+    .models-container {
       display: none;
-      transition: all 0.3s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 20px;
     }
 
-    .brand-card:hover .brand-models {
-      display: block;
-    }
-
-    .search-container {
-      margin-bottom: 32px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 24px;
-      border-radius: 12px;
-      backdrop-filter: blur(10px);
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 16px;
-      border-radius: 12px;
-      border: 2px solid rgba(0, 59, 142, 0.1);
-      font-size: 16px;
-      transition: all 0.3s ease;
+    .models-content {
       background: white;
+      max-width: 1000px;
+      margin: 40px auto;
+      border-radius: 18px;
+      padding: 32px;
+      position: relative;
     }
 
-    .search-input:focus {
-      outline: none;
-      border-color: var(--primary-blue);
-      box-shadow: 0 0 0 3px rgba(0, 59, 142, 0.1);
-    }
-
-    .category-filters {
-      display: flex;
-      gap: 12px;
-      margin: 24px 0;
-      overflow-x: auto;
-      padding-bottom: 12px;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .category-filter {
-      padding: 8px 16px;
-      border-radius: 20px;
-      background: var(--card-gradient);
-      color: white;
+    .close-models {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
       border: none;
+      font-size: 24px;
       cursor: pointer;
-      white-space: nowrap;
+      color: #666;
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .model-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
       transition: all 0.3s ease;
-      font-weight: 500;
     }
 
-    .category-filter:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
+    .model-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 59, 142, 0.1);
     }
 
-    .category-filter.active {
+    .model-image {
+      width: 100%;
+      height: 150px;
+      object-fit: contain;
+      margin-bottom: 16px;
+    }
+
+    .model-name {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .model-details {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 16px;
+    }
+
+    .model-price {
+      font-weight: 600;
+      color: var(--primary-blue);
+      margin-bottom: 12px;
+    }
+
+    .model-button {
+      display: inline-block;
+      padding: 8px 16px;
       background: var(--primary-blue);
-      box-shadow: 0 2px 4px rgba(0, 59, 142, 0.2);
+      color: white;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .model-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 59, 142, 0.2);
+    }
+
+    .selected-brand-info {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .selected-brand-logo {
+      width: 200px;
+      height: 100px;
+      object-fit: contain;
+      margin-bottom: 16px;
+    }
+
+    .selected-brand-name {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .selected-brand-description {
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     @media (max-width: 768px) {
-      .brands-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      .models-content {
+        margin: 20px;
+        padding: 20px;
+      }
+
+      .models-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       }
     }
   </style>
@@ -153,132 +208,4 @@
   <main>
     <section class="hero">
       <div class="hero-content">
-        <h1>Telemandos</h1>
-        <p>Encuentra el telemando para tu vehículo</p>
-      </div>
-    </section>
-
-    <section class="main-content">
-      <div class="content-container">
-        <div class="search-container">
-          <input type="text" class="search-input" placeholder="Buscar por marca o modelo..." id="brandSearch">
-          
-          <div class="category-filters">
-            <button class="category-filter active" data-type="all">Todas</button>
-            <button class="category-filter" data-type="car">Autos</button>
-            <button class="category-filter" data-type="motorcycle">Motos</button>
-            <button class="category-filter" data-type="commercial">Comerciales</button>
-            <button class="category-filter" data-type="luxury">Lujo</button>
-            <button class="category-filter" data-type="electric">Eléctricos</button>
-          </div>
-        </div>
-
-        <div class="brands-grid" id="brandsGrid"></div>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    const brands = [
-      // Autos
-      { name: 'Toyota', type: 'car', logo: 'https://www.carlogos.org/car-logos/toyota-logo-2020-europe.png', models: ['Corolla', 'Hilux', 'RAV4', 'Camry', 'Land Cruiser', 'Yaris'] },
-      { name: 'Volkswagen', type: 'car', logo: 'https://www.carlogos.org/car-logos/volkswagen-logo-2019.png', models: ['Golf', 'Polo', 'Tiguan', 'Amarok', 'Vento', 'T-Cross'] },
-      { name: 'Honda', type: 'car', logo: 'https://www.carlogos.org/car-logos/honda-logo-2000.png', models: ['Civic', 'CR-V', 'HR-V', 'Fit', 'WR-V', 'City'] },
-      { name: 'Ford', type: 'car', logo: 'https://www.carlogos.org/car-logos/ford-logo-2017.png', models: ['Fiesta', 'Focus', 'Ranger', 'Mustang', 'Territory', 'Bronco'] },
-      { name: 'Chevrolet', type: 'car', logo: 'https://www.carlogos.org/car-logos/chevrolet-logo-2013.png', models: ['Cruze', 'Onix', 'S10', 'Camaro', 'Tracker', 'Equinox'] },
-      { name: 'Fiat', type: 'car', logo: 'https://www.carlogos.org/car-logos/fiat-logo-2006.png', models: ['500', 'Cronos', 'Toro', 'Strada', 'Pulse', 'Argo'] },
-      { name: 'Renault', type: 'car', logo: 'https://www.carlogos.org/car-logos/renault-logo-2021.png', models: ['Sandero', 'Duster', 'Alaskan', 'Captur', 'Logan', 'Stepway'] },
-      { name: 'Peugeot', type: 'car', logo: 'https://www.carlogos.org/car-logos/peugeot-logo-2021.png', models: ['208', '2008', '3008', '508', 'Partner', 'Expert'] },
-      { name: 'Citroën', type: 'car', logo: 'https://www.carlogos.org/car-logos/citroen-logo-2009.png', models: ['C3', 'C4', 'Berlingo', 'C5 Aircross', 'C4 Cactus'] },
-      { name: 'Nissan', type: 'car', logo: 'https://www.carlogos.org/car-logos/nissan-logo-2020.png', models: ['Sentra', 'Versa', 'Kicks', 'X-Trail', 'Frontier'] },
-      { name: 'Hyundai', type: 'car', logo: 'https://www.carlogos.org/car-logos/hyundai-logo-2011.png', models: ['HB20', 'Creta', 'Tucson', 'Santa Fe', 'i30'] },
-      { name: 'Kia', type: 'car', logo: 'https://www.carlogos.org/car-logos/kia-logo-2021.png', models: ['Picanto', 'Rio', 'Sportage', 'Seltos', 'Carnival'] },
-
-      // Motos
-      { name: 'Yamaha', type: 'motorcycle', logo: 'https://www.carlogos.org/motorcycle-logos/yamaha-motorcycle-logo-1000x600.png', models: ['YZF-R1', 'MT-07', 'XSR900', 'TMAX', 'Ténéré 700'] },
-      { name: 'Kawasaki', type: 'motorcycle', logo: 'https://www.carlogos.org/motorcycle-logos/kawasaki-motorcycle-logo-1000x600.png', models: ['Ninja', 'Z900', 'Versys', 'H2', 'Vulcan'] },
-      { name: 'Ducati', type: 'motorcycle', logo: 'https://www.carlogos.org/motorcycle-logos/ducati-motorcycle-logo-1000x600.png', models: ['Panigale', 'Monster', 'Multistrada', 'Scrambler', 'Diavel'] },
-      { name: 'Harley-Davidson', type: 'motorcycle', logo: 'https://www.carlogos.org/motorcycle-logos/harley-davidson-motorcycle-logo-1000x600.png', models: ['Sportster', 'Softail', 'Pan America', 'LiveWire', 'Street'] },
-      { name: 'Suzuki', type: 'motorcycle', logo: 'https://www.carlogos.org/motorcycle-logos/suzuki-motorcycle-logo-1000x600.png', models: ['GSX-R1000', 'V-Strom', 'Hayabusa', 'SV650', 'Burgman'] },
-      { name: 'KTM', type: 'motorcycle', logo: 'https://www.carlogos.org/motorcycle-logos/ktm-motorcycle-logo-1000x600.png', models: ['Duke', 'Adventure', 'RC', 'SMC', 'Enduro'] },
-      { name: 'BMW Motorrad', type: 'motorcycle', logo: 'https://www.carlogos.org/motorcycle-logos/bmw-motorcycle-logo-1000x600.png', models: ['R 1250 GS', 'S 1000 RR', 'F 900 R', 'K 1600', 'CE 04'] },
-      { name: 'Triumph', type: 'motorcycle', logo: 'https://www.carlogos.org/motorcycle-logos/triumph-motorcycle-logo-1000x600.png', models: ['Street Triple', 'Tiger', 'Bonneville', 'Rocket 3', 'Trident'] },
-      { name: 'Aprilia', type: 'motorcycle', logo: 'https://www.carlogos.org/motorcycle-logos/aprilia-motorcycle-logo-1000x600.png', models: ['RSV4', 'Tuono', 'RS 660', 'Dorsoduro', 'Shiver'] },
-
-      // Lujo
-      { name: 'BMW', type: 'luxury', logo: 'https://www.carlogos.org/car-logos/bmw-logo-2020.png', models: ['Serie 3', 'X5', 'M3', 'i4', 'Serie 7', 'X7'] },
-      { name: 'Mercedes-Benz', type: 'luxury', logo: 'https://www.carlogos.org/car-logos/mercedes-benz-logo-2011.png', models: ['Clase C', 'GLA', 'Clase A', 'AMG GT', 'Clase S', 'EQS'] },
-      { name: 'Audi', type: 'luxury', logo: 'https://www.carlogos.org/car-logos/audi-logo-2016.png', models: ['A3', 'Q5', 'RS6', 'e-tron', 'A8', 'RS Q8'] },
-      { name: 'Volvo', type: 'luxury', logo: 'https://www.carlogos.org/car-logos/volvo-logo-2014.png', models: ['XC60', 'XC90', 'S60', 'V60', 'C40', 'XC40'] },
-      { name: 'Porsche', type: 'luxury', logo: 'https://www.carlogos.org/car-logos/porsche-logo-2008.png', models: ['911', 'Cayenne', 'Macan', 'Taycan', 'Panamera'] },
-      { name: 'Ferrari', type: 'luxury', logo: 'https://www.carlogos.org/car-logos/ferrari-logo-2002.png', models: ['F8', 'SF90', '296 GTB', 'Roma', '812'] },
-      { name: 'Lamborghini', type: 'luxury', logo: 'https://www.carlogos.org/car-logos/lamborghini-logo-2014.png', models: ['Huracán', 'Aventador', 'Urus', 'Revuelto'] },
-      { name: 'Maserati', type: 'luxury', logo: 'https://www.carlogos.org/car-logos/maserati-logo-2020.png', models: ['Ghibli', 'Levante', 'MC20', 'Grecale'] },
-
-      // Eléctricos
-      { name: 'Tesla', type: 'electric', logo: 'https://www.carlogos.org/car-logos/tesla-logo-2007.png', models: ['Model 3', 'Model Y', 'Model S', 'Model X', 'Cybertruck'] },
-      { name: 'Rivian', type: 'electric', logo: 'https://www.carlogos.org/car-logos/rivian-logo.png', models: ['R1T', 'R1S', 'EDV'] },
-      { name: 'Lucid', type: 'electric', logo: 'https://www.carlogos.org/car-logos/lucid-motors-logo.png', models: ['Air', 'Gravity'] },
-      { name: 'Polestar', type: 'electric', logo: 'https://www.carlogos.org/car-logos/polestar-logo-2020.png', models: ['Polestar 2', 'Polestar 3', 'Polestar 4'] },
-
-      // Comerciales
-      { name: 'MAN', type: 'commercial', logo: 'https://www.carlogos.org/truck-logos/man-logo.png', models: ['TGX', 'TGS', 'TGM', 'TGL', 'Lion\'s City', 'eTGE'] },
-      { name: 'Scania', type: 'commercial', logo: 'https://www.carlogos.org/truck-logos/scania-logo.png', models: ['R Series', 'S Series', 'P Series', 'G Series', 'L Series'] },
-      { name: 'Volvo Trucks', type: 'commercial', logo: 'https://www.carlogos.org/truck-logos/volvo-trucks-logo.png', models: ['FH', 'FM', 'FMX', 'FE', 'FL', 'VNL'] },
-      { name: 'Mercedes-Benz Trucks', type: 'commercial', logo: 'https://www.carlogos.org/truck-logos/mercedes-benz-trucks-logo.png', models: ['Actros', 'Arocs', 'Atego', 'Econic', 'Unimog'] }
-    ];
-
-    function renderBrands(filteredBrands = brands) {
-      const grid = document.getElementById('brandsGrid');
-      grid.innerHTML = '';
-      
-      filteredBrands.forEach(brand => {
-        const card = document.createElement('div');
-        card.className = 'brand-card';
-        
-        card.innerHTML = `
-          <img src="${brand.logo}" alt="${brand.name}" class="brand-logo">
-          <div class="brand-name">${brand.name}</div>
-          <div class="brand-type">${brand.models.length} modelos disponibles</div>
-          <div class="brand-models">
-            ${brand.models.join(' • ')}
-          </div>
-        `;
-        
-        grid.appendChild(card);
-      });
-    }
-
-    // Search functionality
-    document.getElementById('brandSearch').addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
-      const filteredBrands = brands.filter(brand => 
-        brand.name.toLowerCase().includes(searchTerm) ||
-        brand.models.some(model => model.toLowerCase().includes(searchTerm))
-      );
-      renderBrands(filteredBrands);
-    });
-
-    // Category filters
-    document.querySelectorAll('.category-filter').forEach(button => {
-      button.addEventListener('click', () => {
-        // Remove active class from all buttons
-        document.querySelectorAll('.category-filter').forEach(btn => btn.classList.remove('active'));
-        // Add active class to clicked button
-        button.classList.add('active');
-        
-        const type = button.dataset.type;
-        const filteredBrands = type === 'all' 
-          ? brands 
-          : brands.filter(brand => brand.type === type);
-        renderBrands(filteredBrands);
-      });
-    });
-
-    // Initial render
-    renderBrands();
-  </script>
-
-  <script src="/main.js"></script>
-</body>
-</html>
+        <h1>Telemandos</h
