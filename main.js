@@ -1,24 +1,24 @@
-// Theme management
-const theme = localStorage.getItem('theme') || 'light';
-document.documentElement.setAttribute('data-theme', theme);
-
 // Navigation with scroll effect
 let lastScrollY = window.scrollY;
 const nav = document.querySelector('nav');
 const hero = document.querySelector('.hero');
 
-// Add theme toggle button to nav
-const themeToggle = document.createElement('button');
-themeToggle.className = 'theme-toggle';
-themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌙';
-themeToggle.addEventListener('click', () => {
-  const currentTheme = document.documentElement.getAttribute('data-theme');
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('theme', newTheme);
-  themeToggle.innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
+window.addEventListener('scroll', () => {
+  // Hide/show nav on scroll
+  if (window.scrollY > lastScrollY) {
+    nav.classList.add('nav-hidden');
+  } else {
+    nav.classList.remove('nav-hidden');
+  }
+  lastScrollY = window.scrollY;
+
+  // Parallax effect on hero
+  if (hero && window.scrollY > 50) {
+    hero.classList.add('scrolled');
+  } else if (hero) {
+    hero.classList.remove('scrolled');
+  }
 });
-nav.insertBefore(themeToggle, nav.firstChild);
 
 // Mobile menu functionality
 const menuButton = document.querySelector('.menu-button');
@@ -46,23 +46,6 @@ if (menuButton && navLinks) {
     });
   });
 }
-
-window.addEventListener('scroll', () => {
-  // Hide/show nav on scroll
-  if (window.scrollY > lastScrollY) {
-    nav.classList.add('nav-hidden');
-  } else {
-    nav.classList.remove('nav-hidden');
-  }
-  lastScrollY = window.scrollY;
-
-  // Parallax effect on hero
-  if (hero && window.scrollY > 50) {
-    hero.classList.add('scrolled');
-  } else if (hero) {
-    hero.classList.remove('scrolled');
-  }
-});
 
 // Animation observer configuration
 const observerOptions = {
