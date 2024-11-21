@@ -15,6 +15,57 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .app-download {
+      position: fixed;
+      top: calc(var(--nav-height) + 40px);
+      right: 20px;
+      z-index: 99;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0, 59, 142, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .app-download-item {
+      text-align: center;
+    }
+
+    .app-download img {
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .app-download a:hover img {
+      transform: scale(1.05);
+    }
+
+    .app-download-label {
+      font-size: 14px;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .app-download {
+        position: relative;
+        top: 0;
+        right: 0;
+        flex-direction: row;
+        justify-content: center;
+        margin: 20px auto;
+        width: fit-content;
+      }
+    }
+  </style>
 </head>
 <body>
   <nav>
@@ -34,6 +85,25 @@
       <i class="fas fa-bars"></i>
     </button>
   </nav>
+
+  <div class="app-download">
+    <div class="app-download-item">
+      <a href="https://apps.apple.com/id/app/kioskeys/id1632084137" target="_blank" rel="noopener">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://apps.apple.com/id/app/kioskeys/id1632084137" alt="App Store QR">
+        <div class="app-download-label">
+          <i class="fab fa-apple"></i> App Store
+        </div>
+      </a>
+    </div>
+    <div class="app-download-item">
+      <a href="https://play.google.com/store/apps/details?id=com.imagosur.keymanager_app&hl=es" target="_blank" rel="noopener">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://play.google.com/store/apps/details?id=com.imagosur.keymanager_app" alt="Play Store QR">
+        <div class="app-download-label">
+          <i class="fab fa-google-play"></i> Play Store
+        </div>
+      </a>
+    </div>
+  </div>
 
   <main>
     <section class="hero">
