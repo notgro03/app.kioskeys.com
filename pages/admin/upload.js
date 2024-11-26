@@ -1,4 +1,4 @@
-import {1985ca48f4d597426e30 } from './config.js';
+import {1985ca48f4d597426e30} from './config.js';
 import { compressImage, validateImage } from './utils.js';
 import { ImageAPI } from './api.js';
 
