@@ -6,8 +6,130 @@
   <title>Panel de Control - Kioskeys</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
-    /* ... (estilos anteriores se mantienen igual) ... */
+    .admin-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .login-container {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 24px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 59, 142, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .admin-button {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary-blue);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .admin-button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .error-message {
+      color: #dc3545;
+      font-size: 14px;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .admin-card {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 59, 142, 0.1);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .admin-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(0, 59, 142, 0.15);
+    }
+
+    .admin-icon {
+      font-size: 32px;
+      color: var(--primary-blue);
+      margin-bottom: 16px;
+    }
+
+    .admin-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-color);
+    }
+
+    .admin-description {
+      color: #666;
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    #adminContent {
+      display: none;
+    }
+
+    .nav-button {
+      padding: 8px 16px;
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+      font-size: 16px;
+      opacity: 0.8;
+      transition: all 0.3s ease;
+    }
+
+    .nav-button:hover {
+      opacity: 1;
+    }
+
+    .nav-button.active {
+      color: var(--primary-blue);
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -16,8 +138,10 @@
       <a href="/"><img src="/logo.svg" alt="Kioskeys"></a>
     </div>
     <div class="nav-links">
-      <a href="/">Inicio</a>
-      <a href="#" onclick="logout()" id="logoutButton" style="display: none;">Cerrar Sesión</a>
+      <a href="/" class="nav-button">Inicio</a>
+      <button onclick="logout()" id="logoutButton" class="nav-button" style="display: none;">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
     </div>
   </nav>
 
@@ -30,13 +154,13 @@
     </section>
 
     <section class="main-content">
-      <div class="content-container">
+      <div class="admin-container">
         <!-- Login Form -->
         <div id="loginForm" class="login-container">
-          <h3 style="margin-bottom: 20px;">Acceso Administrativo</h3>
+          <h3 style="margin-bottom: 20px; text-align: center;">Acceso Administrativo</h3>
           <div class="form-group">
             <label for="password">Contraseña de Acceso</label>
-            <input type="password" id="password">
+            <input type="password" id="password" placeholder="Ingrese la contraseña">
             <div id="errorMessage" class="error-message"></div>
           </div>
           <button class="admin-button" onclick="verifyAccess()">
@@ -47,25 +171,31 @@
         <!-- Admin Content -->
         <div id="adminContent">
           <div class="admin-grid">
-            <div class="admin-card" onclick="window.location.href='logos.html'">
+            <div class="admin-card">
               <i class="fas fa-images admin-icon"></i>
               <div class="admin-title">Editor de Logos</div>
               <p class="admin-description">Gestiona los logos de marcas y vehículos</p>
-              <a href="logos.html" class="admin-button">Administrar</a>
+              <button class="admin-button" onclick="window.location.href='logos.html'">
+                <i class="fas fa-edit"></i> Administrar
+              </button>
             </div>
 
-            <div class="admin-card" onclick="window.location.href='productos.html'">
+            <div class="admin-card">
               <i class="fas fa-box admin-icon"></i>
               <div class="admin-title">Productos</div>
               <p class="admin-description">Administra el catálogo de productos</p>
-              <a href="productos.html" class="admin-button">Administrar</a>
+              <button class="admin-button" onclick="window.location.href='productos.html'">
+                <i class="fas fa-plus"></i> Administrar
+              </button>
             </div>
 
-            <div class="admin-card" onclick="window.location.href='apariencia.html'">
+            <div class="admin-card">
               <i class="fas fa-paint-brush admin-icon"></i>
               <div class="admin-title">Apariencia</div>
               <p class="admin-description">Personaliza colores y estilos del sitio</p>
-              <a href="apariencia.html" class="admin-button">Personalizar</a>
+              <button class="admin-button" onclick="window.location.href='apariencia.html'">
+                <i class="fas fa-palette"></i> Personalizar
+              </button>
             </div>
           </div>
         </div>
@@ -94,17 +224,40 @@
         adminContent.style.display = 'block';
         logoutButton.style.display = 'block';
         
-        errorMessage.style.display = 'none';
+        // Mostrar mensaje de bienvenida
+        Swal.fire({
+          icon: 'success',
+          title: '¡Bienvenido!',
+          text: 'Has iniciado sesión correctamente',
+          timer: 2000,
+          showConfirmButton: false
+        });
       } else {
-        errorMessage.textContent = 'Contraseña incorrecta';
-        errorMessage.style.display = 'block';
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Contraseña incorrecta'
+        });
       }
     }
 
     // Función para cerrar sesión
     function logout() {
-      sessionStorage.removeItem('adminAuthenticated');
-      window.location.reload();
+      Swal.fire({
+        title: '¿Cerrar sesión?',
+        text: "¿Estás seguro de que quieres salir?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, cerrar sesión',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          sessionStorage.removeItem('adminAuthenticated');
+          window.location.reload();
+        }
+      });
     }
 
     // Verificar estado de autenticación al cargar
