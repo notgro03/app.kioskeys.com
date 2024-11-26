@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "uploadcare-widget": "^3.21.2",
-    "sweetalert2": "^11.10.5"
+    "sweetalert2": "^11.10.5",
+    "compressorjs": "^1.2.1"
   }
 }
