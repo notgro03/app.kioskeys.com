@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Control - Kioskeys</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .admin-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .admin-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    .admin-icon {
+      font-size: 32px;
+      color: var(--primary-blue);
+      margin-bottom: 16px;
+    }
+
+    .admin-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .admin-description {
+      font-size: 14px;
+      color: #6e6e73;
+      margin-bottom: 16px;
+    }
+
+    .admin-button {
+      display: inline-block;
+      padding: 8px 16px;
+      background: var(--primary-blue);
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .admin-button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .login-container {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 24px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .error-message {
+      color: #dc3545;
+      font-size: 14px;
+      margin-top: 8px;
+      display: none;
+    }
+
+    #adminContent {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <a href="/"><img src="/logo.svg" alt="Kioskeys"></a>
+    </div>
+    <div class="nav-links">
+      <a href="/">Inicio</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Panel de Control</h1>
+        <p>Administración del sitio</p>
+      </div>
+    </section>
+
+    <section class="main-content">
+      <div class="content-container">
+        <!-- Login Form -->
+        <div id="loginForm" class="login-container">
+          <h3 style="margin-bottom: 20px;">Acceso Administrativo</h3>
+          <div class="form-group">
+            <label for="password">Contraseña de Acceso</label>
+            <input type="password" id="password">
+            <div id="errorMessage" class="error-message"></div>
+          </div>
+          <button class="admin-button" onclick="verifyAccess()">
+            <i class="fas fa-lock"></i> Acceder
+          </button>
+        </div>
+
+        <!-- Admin Content -->
+        <div id="adminContent">
+          <div class="admin-grid">
+            <div class="admin-card">
+              <i class="fas fa-images admin-icon"></i>
+              <div class="admin-title">Editor de Logos</div>
+              <p class="admin-description">Gestiona los logos de marcas y vehículos</p>
+              <a href="/pages/admin/logos-simple.html" class="admin-button">Administrar</a>
+            </div>
+
+            <div class="admin-card">
+              <i class="fas fa-box admin-icon"></i>
+              <div class="admin-title">Productos</div>
+              <p class="admin-description">Administra el catálogo de productos</p>
+              <a href="/pages/admin/productos.html" class="admin-button">Administrar</a>
+            </div>
+
+            <div class="admin-card">
+              <i class="fas fa-paint-brush admin-icon"></i>
+              <div class="admin-title">Apariencia</div>
+              <p class="admin-description">Personaliza colores y estilos del sitio</p>
+              <a href="/pages/admin/apariencia.html" class="admin-button">Personalizar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Contraseña de acceso (cámbiala por una segura)
+    const ACCESS_PASSWORD = 'kioskeys2024';
+    
+    function verifyAccess() {
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('errorMessage');
+      const loginForm = document.getElementById('loginForm');
+      const adminContent = document.getElementById('adminContent');
+
+      if (password === ACCESS_PASSWORD) {
+        // Guardar estado de autenticación
+        sessionStorage.setItem('adminAuthenticated', 'true');
+        
+        // Mostrar contenido admin
+        loginForm.style.display = 'none';
+        adminContent.style.display = 'block';
+        
+        errorMessage.style.display = 'none';
+      } else {
+        errorMessage.textContent = 'Contraseña incorrecta';
+        errorMessage.style.display = 'block';
+      }
+    }
+
+    // Verificar estado de autenticación al cargar
+    document.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('adminAuthenticated') === 'true') {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
