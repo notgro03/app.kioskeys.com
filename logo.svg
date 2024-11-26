@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Logo KiosKeys</title>
-</head>
-<body>
-  <!-- SVG incrustado -->
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 173 173">
-    <!-- Si el SVG es extenso, pega aquí solo el contenido limpio del SVG -->
-    <!-- Esto es un ejemplo con una estructura SVG simple -->
-    <rect width="100%" height="100%" fill="blue" />
-    <circle cx="86.5" cy="86.5" r="50" fill="yellow" />
-    <text x="86.5" y="100" font-size="20" text-anchor="middle" fill="white">KiosKeys</text>
-  </svg>
-</body>
-</html>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 800" width="800" height="800">
+  <!-- K Symbol -->
+  <path d="M200 200 L400 400 L200 600" stroke="#003B8E" stroke-width="80" stroke-linecap="round"/>
+  <path d="M600 200 L400 400 L600 600" stroke="#00A3FF" stroke-width="80" stroke-linecap="round"/>
+  
+  <!-- Text "KIOSKEYS" -->
+  <text x="400" y="700" text-anchor="middle" font-family="Arial, sans-serif" font-size="120" font-weight="bold">
+    <tspan fill="#003B8E">KIOS</tspan><tspan fill="#00A3FF">KEYS</tspan>
+  </text>
+  
+  <!-- Text "COPY KEYS" -->
+  <text x="400" y="780" text-anchor="middle" font-family="Arial, sans-serif" font-size="60" fill="#666666">
+    COPY KEYS
+  </text>
+</svg>
