@@ -1,1 +1,10 @@
-<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iODAwIiB2aWV3Qm94PSIwIDAgODAwIDgwMCI+CiAgPHBhdGggZD0iTTIwMCAyMDAgTDQwMCA0MDAgTDIwMCA2MDAiIHN0cm9rZT0iIzAwM0I4RSIgc3Ryb2tlLXdpZHRoPSI4MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTYwMCAyMDAgTDQwMCA0MDAgTDYwMCA2MDAiIHN0cm9rZT0iIzAwQTNGRiIgc3Ryb2tlLXdpZHRoPSI4MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHRleHQgeD0iNDAwIiB5PSI3MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMjAiIGZvbnQtd2VpZ2h0PSJib2xkIj4KICAgIDx0c3BhbiBmaWxsPSIjMDAzQjhFIj5LSU9TPC90c3Bhbj48dHNwYW4gZmlsbD0iIzAwQTNGRiI+S0VZUzwvdHNwYW4+CiAgPC90ZXh0PgogIDx0ZXh0IHg9IjQwMCIgeT0iNzgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNjAiIGZpbGw9IiM2NjY2NjYiPgogICAgQ09QWSBLRVlTCiAgPC90ZXh0Pgo8L3N2Zz4=" alt="Logo KiosKeys">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+  <path d="M200 200 L400 400 L200 600" stroke="#003B8E" stroke-width="80" stroke-linecap="round"/>
+  <path d="M600 200 L400 400 L600 600" stroke="#00A3FF" stroke-width="80" stroke-linecap="round"/>
+  <text x="400" y="700" text-anchor="middle" font-family="Arial, sans-serif" font-size="120" font-weight="bold">
+    <tspan fill="#003B8E">KIOS</tspan><tspan fill="#00A3FF">KEYS</tspan>
+  </text>
+  <text x="400" y="780" text-anchor="middle" font-family="Arial, sans-serif" font-size="60" fill="#666666">
+    COPY KEYS
+  </text>
+</svg>
