@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editor de Apariencia - Kioskeys</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+  <style>
+    .editor-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .settings-section {
+      margin-bottom: 32px;
+      padding: 24px;
+      border: 2px solid #eee;
+      border-radius: 8px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--primary-blue);
+    }
+
+    .color-picker {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .color-preview {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+    }
+
+    .image-preview {
+      width: 200px;
+      height: auto;
+      border-radius: 8px;
+      margin: 16px 0;
+      border: 2px solid #ddd;
+    }
+
+    .button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .button-primary {
+      background: var(--primary-blue);
+      color: white;
+    }
+
+    .preview-section {
+      margin-top: 32px;
+      padding: 24px;
+      border: 2px solid #eee;
+      border-radius: 8px;
+    }
+
+    .preview-content {
+      padding: 24px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+
+    .uploadcare--widget {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <a href="/"><img src="/logo.svg" alt="Kioskeys"></a>
+    </div>
+    <div class="nav-links">
+      <a href="/">Inicio</a>
+      <a href="/admin">Panel Admin</a>
+      <a href="/admin/apariencia" class="active">Apariencia</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Editor de Apariencia</h1>
+        <p>Personaliza el aspecto de tu sitio</p>
+      </div>
+    </section>
+
+    <section class="main-content">
+      <div class="editor-container">
+        <div class="settings-section">
+          <h3 class="section-title">Colores del Sitio</h3>
+          
+          <div class="color-picker">
+            <label>Color Principal:</label>
+            <input type="color" id="primaryColor" value="#003B8E">
+            <div class="color-preview" id="primaryPreview"></div>
+          </div>
+
+          <div class="color-picker">
+            <label>Color Secundario:</label>
+            <input type="color" id="secondaryColor" value="#0072BC">
+            <div class="color-preview" id="secondaryPreview"></div>
+          </div>
+
+          <div class="color-picker">
+            <label>Color de Texto:</label>
+            <input type="color" id="textColor" value="#1d1d1f">
+            <div class="color-preview" id="textPreview"></div>
+          </div>
+
+          <button class="button button-primary" onclick="saveColors()">
+            <i class="fas fa-save"></i> Guardar Colores
+          </button>
+        </div>
+
+        <div class="settings-section">
+          <h3 class="section-title">Logos e Iconos</h3>
+          
+          <div>
+            <label>Logo Principal:</label>
+            <input type="hidden" 
+                   role="uploadcare-uploader"
+                   data-images-only
+                   id="mainLogo">
+            <img id="logoPreview" class="image-preview" src="/logo.svg" alt="Logo">
+          </div>
+
+          <div style="margin-top: 24px;">
+            <label>Favicon:</label>
+            <input type="hidden" 
+                   role="uploadcare-uploader"
+                   data-images-only
+                   data-crop="1:1"
+                   id="favicon">
+            <img id="faviconPreview" style="width: 32px; height: 32px; margin: 16px 0;" 
+                 src="/favicon.svg" alt="Favicon">
+          </div>
+
+          <button class="button button-primary" onclick="saveImages()">
+            <i class="fas fa-save"></i> Guardar Imágenes
+          </button>
+        </div>
+
+        <div class="preview-section">
+          <h3 class="section-title">Vista Previa</h3>
+          <div class="preview-content" id="previewContent">
+            <div style="text-align: center;">
+              <img id="previewLogo" src="/logo.svg" alt="Logo" style="height: 40px; margin-bottom: 24px;">
+              <h1 style="font-size: 32px; margin-bottom: 16px;">Título de Ejemplo</h1>
+              <p style="margin-bottom: 24px;">Este es un texto de ejemplo para ver cómo se ven los colores.</p>
+              <button class="button button-primary">Botón de Ejemplo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Configuración de Uploadcare
+    UPLOADCARE_PUBLIC_KEY = 'demopublickey'; // Reemplazar con tu clave real
+
+    // Inicializar widgets de Uploadcare
+    const logoWidget = uploadcare.Widget('[role=uploadcare-uploader]#mainLogo');
+    logoWidget.onUploadComplete(info => {
+      document.getElementById('logoPreview').src = info.cdnUrl;
+      document.getElementById('previewLogo').src = info.cdnUrl;
+      updatePreview();
+    });
+
+    const faviconWidget = uploadcare.Widget('[role=uploadcare-uploader]#favicon');
+    faviconWidget.onUploadComplete(info => {
+      document.getElementById('faviconPreview').src = info.cdnUrl;
+      // Actualizar favicon real
+      const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+      link.type = 'image/x-icon';
+      link.rel = 'shortcut icon';
+      link.href = info.cdnUrl;
+      document.getElementsByTagName('head')[0].appendChild(link);
+    });
+
+    // Actualizar previsualizaciones de color
+    function updateColorPreviews() {
+      const primaryColor = document.getElementById('primaryColor').value;
+      const secondaryColor = document.getElementById('secondaryColor').value;
+      const textColor = document.getElementById('textColor').value;
+
+      document.getElementById('primaryPreview').style.backgroundColor = primaryColor;
+      document.getElementById('secondaryPreview').style.backgroundColor = secondaryColor;
+      document.getElementById('textPreview').style.backgroundColor = textColor;
+
+      updatePreview();
+    }
+
+    // Actualizar vista previa
+    function updatePreview() {
+      const primaryColor = document.getElementById('primaryColor').value;
+      const secondaryColor = document.getElementById('secondaryColor').value;
+      const textColor = document.getElementById('textColor').value;
+
+      const preview = document.getElementById('previewContent');
+      preview.style.background = `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`;
+      preview.style.color = textColor;
+    }
+
+    // Guardar colores
+    async function saveColors() {
+      const colors = {
+        primary: document.getElementById('primaryColor').value,
+        secondary: document.getElementById('secondaryColor').value,
+        text: document.getElementById('textColor').value
+      };
+
+      try {
+        localStorage.setItem('kioskeys_colors', JSON.stringify(colors));
+        
+        // Actualizar variables CSS
+        document.documentElement.style.setProperty('--primary-blue', colors.primary);
+        document.documentElement.style.setProperty('--secondary-blue', colors.secondary);
+        document.documentElement.style.setProperty('--text-color', colors.text);
+
+        await Swal.fire({
+          icon: 'success',
+          title: 'Colores guardados',
+          text: 'Los colores se han actualizado correctamente'
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al guardar los colores'
+        });
+      }
+    }
+
+    // Guardar imágenes
+    async function saveImages() {
+      const images = {
+        logo: document.getElementById('logoPreview').src,
+        favicon: document.getElementById('faviconPreview').src
+      };
+
+      try {
+        localStorage.setItem('kioskeys_images', JSON.stringify(images));
+        
+        await Swal.fire({
+          icon: 'success',
+          title: 'Imágenes guardadas',
+          text: 'Las imágenes se han actualizado correctamente'
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al guardar las imágenes'
+        });
+      }
+    }
+
+    // Cargar configuración guardada
+    function loadSavedSettings() {
+      const colors = JSON.parse(localStorage.getItem('kioskeys_colors'));
+      if (colors) {
+        document.getElementById('primaryColor').value = colors.primary;
+        document.getElementById('secondaryColor').value = colors.secondary;
+        document.getElementById('textColor').value = colors.text;
+        updateColorPreviews();
+      }
+
+      const images = JSON.parse(localStorage.getItem('kioskeys_images'));
+      if (images) {
+        if (images.logo) {
+          document.getElementById('logoPreview').src = images.logo;
+          document.getElementById('previewLogo').src = images.logo;
+        }
+        if (images.favicon) {
+          document.getElementById('faviconPreview').src = images.favicon;
+          const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+          link.type = 'image/x-icon';
+          link.rel = 'shortcut icon';
+          link.href = images.favicon;
+          document.getElementsByTagName('head')[0].appendChild(link);
+        }
+      }
+    }
+
+    // Eventos para actualización en tiempo real
+    ['primaryColor', 'secondaryColor', 'textColor'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateColorPreviews);
+    });
+
+    // Inicializar
+    document.addEventListener('DOMContentLoaded', loadSavedSettings);
+  </script>
+</body>
+</html>

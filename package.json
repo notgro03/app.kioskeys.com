@@ -13,5 +13,9 @@
     "tailwindcss": "^3.4.1",
     "autoprefixer": "^10.4.17",
     "postcss": "^8.4.35"
+  },
+  "dependencies": {
+    "uploadcare-widget": "^3.21.2",
+    "sweetalert2": "^11.10.5"
   }
 }
