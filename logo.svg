@@ -6,7 +6,13 @@
   <title>Logo KiosKeys</title>
 </head>
 <body>
-  <!-- Incrustación del SVG -->
+  <!-- SVG incrustado -->
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 173 173">
-    <style>.cls-1{fill:#ffde18;}</style>
-    <path class="cls-1" d="M75.92,20.27c0-1.69,.04-3.38-.01-5.06-.06-2.16-1.12-3.31-3.3-3.46-3.63-.24-7.25-.65-10.84-1.22-6.15-1-10.26-5.57-10.13-11.27C51.72-3.3,52.1-3.56,57.08-.48c2.15,1.33,5.44,2.52,6.78,4.63,1.67,2.67,3.09,5.72,
+    <!-- Si el SVG es extenso, pega aquí solo el contenido limpio del SVG -->
+    <!-- Esto es un ejemplo con una estructura SVG simple -->
+    <rect width="100%" height="100%" fill="blue" />
+    <circle cx="86.5" cy="86.5" r="50" fill="yellow" />
+    <text x="86.5" y="100" font-size="20" text-anchor="middle" fill="white">KiosKeys</text>
+  </svg>
+</body>
+</html>
