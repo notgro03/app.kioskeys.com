@@ -14,19 +14,16 @@ export default defineConfig({
         'contacto': 'pages/contacto.html',
         'tutoriales': 'pages/tutoriales.html',
         'telemandos': 'pages/telemandos.html',
-        'llaves': 'pages/llaves.html',
-        'carcasas': 'pages/carcasas.html',
-        'accesorios': 'pages/accesorios.html',
         'blog': 'pages/blog.html',
         'faq': 'pages/faq.html',
         'privacidad': 'pages/privacidad.html',
-        'terminos': 'pages/terminos.html'
+        'terminos': 'pages/terminos.html',
+        'llaves': 'pages/llaves.html',
+        'carcasas': 'pages/carcasas.html',
+        'accesorios': 'pages/accesorios.html',
+        'admin': 'pages/admin/kioskeys-admin-x7k9y2.html'
       }
     }
-  },
-  base: '',
-  server: {
-    open: true
   },
   resolve: {
     alias: {
@@ -37,8 +34,14 @@ export default defineConfig({
     name: 'rewrite-middleware',
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
+        // Remover .html de las URLs
         if (req.url.endsWith('.html')) {
           req.url = req.url.slice(0, -5)
+        }
+        
+        // Redirigir /admin a la página de administración
+        if (req.url === '/admin') {
+          req.url = '/pages/admin/kioskeys-admin-x7k9y2'
         }
         next()
       })
