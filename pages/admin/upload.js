@@ -1,68 +1,137 @@
-import {1985ca48f4d597426e30} from './config.js';
-import { compressImage, validateImage } from './utils.js';
-import { ImageAPI } from './api.js';
+// Configuración de Uploadcare
+const UPLOADCARE_PUBLIC_KEY = '1985ca48f4d597426e30';
 
-export const initializeUploader = (selector, options = {}) => {
-  const widget = uploadcare.Widget(selector, {
+// Inicializar widget de Uploadcare
+export function initializeUploader(element, options = {}) {
+  const defaultOptions = {
     publicKey: UPLOADCARE_PUBLIC_KEY,
-    imagesOnly: true,
+    tabs: 'file url',
     previewStep: true,
-    crop: options.crop || '',
-    imageShrink: '1920x1080',
+    clearable: true,
+    multiple: false,
+    imagesOnly: true,
     ...options
+  };
+
+  const widget = uploadcare.Widget(element, defaultOptions);
+
+  widget.onUploadComplete((fileInfo) => {
+    if (options.onSuccess) {
+      options.onSuccess(fileInfo);
+    }
   });
 
-  widget.onUploadComplete(async (info) => {
-    try {
-      // Guardar URL en el sistema
-      await ImageAPI.save(info.cdnUrl, options.type || 'product');
-      
-      // Callback personalizado
-      if (options.onComplete) {
-        options.onComplete(info);
-      }
-    } catch (error) {
-      console.error('Error en carga de imagen:', error);
-      if (options.onError) {
-        options.onError(error);
-      }
+  widget.onUploadFail((error) => {
+    if (options.onError) {
+      options.onError(error);
     }
+    console.error('Error al cargar imagen:', error);
   });
 
   return widget;
-};
+}
 
-export const handleImageUpload = async (file, options = {}) => {
-  try {
-    // Validar imagen
-    validateImage(file);
+// Función para mostrar vista previa de imagen
+export function showImagePreview(imageUrl, previewElement) {
+  if (!previewElement) return;
+  
+  const img = previewElement instanceof HTMLImageElement ? 
+    previewElement : 
+    previewElement.querySelector('img');
 
-    // Comprimir imagen
-    const compressedFile = await compressImage(file);
-
-    // Crear FormData para la carga
-    const formData = new FormData();
-    formData.append('file', compressedFile);
-    formData.append('UPLOADCARE_PUB_KEY', UPLOADCARE_PUBLIC_KEY);
-
-    // Subir a Uploadcare
-    const response = await fetch('https://upload.uploadcare.com/base/', {
-      method: 'POST',
-      body: formData
-    });
-
-    if (!response.ok) {
-      throw new Error('Error al subir la imagen');
-    }
-
-    const data = await response.json();
-    
-    // Guardar URL en el sistema
-    await ImageAPI.save(data.file, options.type || 'product');
-
-    return data.file;
-  } catch (error) {
-    console.error('Error en carga de imagen:', error);
-    throw error;
+  if (img) {
+    img.src = imageUrl;
+    img.onerror = () => {
+      img.src = 'https://via.placeholder.com/200x200?text=Error+de+imagen';
+    };
   }
-};
+}
+
+// Función para guardar URL de imagen en localStorage
+export function saveImageUrl(key, imageUrl) {
+  try {
+    let images = JSON.parse(localStorage.getItem(key) || '[]');
+    images.push({
+      url: imageUrl,
+      timestamp: new Date().toISOString()
+    });
+    localStorage.setItem(key, JSON.stringify(images));
+    return true;
+  } catch (error) {
+    console.error('Error al guardar imagen:', error);
+    return false;
+  }
+}
+
+// Función para obtener imágenes guardadas
+export function getStoredImages(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key) || '[]');
+  } catch (error) {
+    console.error('Error al obtener imágenes:', error);
+    return [];
+  }
+}
+
+// Función para eliminar imagen
+export function deleteStoredImage(key, imageUrl) {
+  try {
+    let images = JSON.parse(localStorage.getItem(key) || '[]');
+    images = images.filter(img => img.url !== imageUrl);
+    localStorage.setItem(key, JSON.stringify(images));
+    return true;
+  } catch (error) {
+    console.error('Error al eliminar imagen:', error);
+    return false;
+  }
+}
+
+// Función para validar imagen
+export function validateImage(file) {
+  const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  const maxSize = 5 * 1024 * 1024; // 5MB
+
+  if (!validTypes.includes(file.type)) {
+    throw new Error('Formato de imagen no válido. Use JPG, PNG o WebP.');
+  }
+
+  if (file.size > maxSize) {
+    throw new Error('La imagen es demasiado grande. Máximo 5MB.');
+  }
+
+  return true;
+}
+
+// Función para crear widget de carga de imagen
+export function createUploadWidget(containerId, options = {}) {
+  const container = document.getElementById(containerId);
+  if (!container) return null;
+
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.setAttribute('role', 'uploadcare-uploader');
+  container.appendChild(input);
+
+  return initializeUploader(input, {
+    ...options,
+    onSuccess: (fileInfo) => {
+      showImagePreview(fileInfo.cdnUrl, container.querySelector('.preview'));
+      if (options.onSuccess) {
+        options.onSuccess(fileInfo);
+      }
+    }
+  });
+}
+
+// Función para inicializar todos los uploaders en la página
+export function initializeAllUploaders() {
+  document.querySelectorAll('[data-uploader]').forEach(element => {
+    const options = {
+      previewElement: element.querySelector('.preview'),
+      storageKey: element.dataset.storageKey,
+      ...JSON.parse(element.dataset.uploaderOptions || '{}')
+    };
+
+    createUploadWidget(element.id, options);
+  });
+}
