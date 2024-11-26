@@ -6,6 +6,9 @@
   <title>Personalizar Apariencia - Kioskeys</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Widget de Uploadcare -->
+  <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+  <script>UPLOADCARE_PUBLIC_KEY = '1985ca48f4d597426e30';</script>
   <style>
     .admin-container {
       max-width: 1200px;
@@ -69,6 +72,8 @@
       margin: 16px 0;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 8px;
+      background: white;
     }
 
     .button {
@@ -113,12 +118,37 @@
       padding: 24px;
       margin-top: 16px;
     }
+
+    .upload-button {
+      display: inline-block;
+      margin: 8px 0;
+      padding: 8px 16px;
+      background: var(--primary-blue);
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .upload-button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .image-uploader {
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .uploadcare--widget {
+      display: inline-block;
+    }
   </style>
 </head>
 <body>
   <nav>
     <div class="logo">
-      <a href="/"><img src="/logo.svg" alt="Kioskeys"></a>
+      <a href="/"><img src="/logo.svg" alt="Kioskeys" id="navLogo"></a>
     </div>
     <div class="nav-links">
       <a href="/">Inicio</a>
@@ -141,6 +171,21 @@
         <div id="successMessage" class="success-message"></div>
 
         <div class="settings-grid">
+          <div class="settings-section">
+            <h3>Logo del Sitio</h3>
+            
+            <div class="image-uploader">
+              <img id="logoPreview" class="logo-preview" src="/logo.svg" alt="Logo Preview">
+              <input type="hidden" role="uploadcare-uploader" data-images-only="true" data-crop="1:1">
+            </div>
+
+            <div style="text-align: center;">
+              <button class="button button-primary" onclick="saveLogo()">
+                <i class="fas fa-save"></i> Guardar Logo
+              </button>
+            </div>
+          </div>
+
           <div class="settings-section">
             <h3>Colores del Sitio</h3>
             
@@ -166,32 +211,13 @@
               <i class="fas fa-save"></i> Guardar Colores
             </button>
           </div>
-
-          <div class="settings-section">
-            <h3>Logos e Imágenes</h3>
-            
-            <div class="form-group">
-              <label>Logo Principal:</label>
-              <input type="url" id="mainLogo" placeholder="URL del logo">
-              <img id="logoPreview" class="logo-preview" src="/logo.svg" alt="Logo Preview">
-            </div>
-
-            <div class="form-group">
-              <label>Favicon:</label>
-              <input type="url" id="favicon" placeholder="URL del favicon">
-              <img id="faviconPreview" style="width: 32px; height: 32px; margin: 16px 0;" src="/favicon.svg" alt="Favicon Preview">
-            </div>
-
-            <button class="button button-primary" onclick="saveLogos()">
-              <i class="fas fa-save"></i> Guardar Imágenes
-            </button>
-          </div>
         </div>
 
         <div class="preview-section">
           <h3 class="preview-title">Vista Previa</h3>
           <div id="livePreview">
             <div style="padding: 20px; border-radius: 8px;">
+              <img id="previewLogo" src="/logo.svg" alt="Logo Preview" style="width: 200px; margin-bottom: 20px;">
               <h4>Ejemplo de Contenido</h4>
               <p>Este es un texto de ejemplo para ver cómo se ven los colores.</p>
               <button class="button button-primary">Botón de Ejemplo</button>
@@ -203,6 +229,24 @@
   </main>
 
   <script>
+    // Inicializar widget de Uploadcare
+    const widget = uploadcare.Widget('[role=uploadcare-uploader]');
+    
+    widget.onUploadComplete(function(info) {
+      // Actualizar previsualización
+      const logoPreview = document.getElementById('logoPreview');
+      const previewLogo = document.getElementById('previewLogo');
+      const navLogo = document.getElementById('navLogo');
+      
+      logoPreview.src = info.cdnUrl;
+      previewLogo.src = info.cdnUrl;
+      navLogo.src = info.cdnUrl;
+      
+      // Guardar URL del logo
+      localStorage.setItem('kioskeys_logo', info.cdnUrl);
+      showSuccess('Logo actualizado correctamente');
+    });
+
     // Mostrar mensaje de éxito
     function showSuccess(message) {
       const successMsg = document.getElementById('successMessage');
@@ -248,37 +292,21 @@
       document.documentElement.style.setProperty('--text-color', colors.text);
     }
 
-    // Previsualizar logo
-    document.getElementById('mainLogo').addEventListener('input', function(e) {
-      const preview = document.getElementById('logoPreview');
-      preview.src = e.target.value;
-      preview.onerror = function() {
-        preview.src = '/logo.svg';
-      };
-    });
-
-    // Previsualizar favicon
-    document.getElementById('favicon').addEventListener('input', function(e) {
-      const preview = document.getElementById('faviconPreview');
-      preview.src = e.target.value;
-      preview.onerror = function() {
-        preview.src = '/favicon.svg';
-      };
-    });
-
-    // Guardar logos
-    function saveLogos() {
-      const logos = {
-        main: document.getElementById('mainLogo').value,
-        favicon: document.getElementById('favicon').value
-      };
-
-      localStorage.setItem('kioskeys_logos', JSON.stringify(logos));
-      showSuccess('Logos guardados correctamente');
+    // Guardar logo
+    function saveLogo() {
+      const logoUrl = document.getElementById('logoPreview').src;
+      if (logoUrl === '/logo.svg') {
+        alert('Por favor, sube un nuevo logo primero');
+        return;
+      }
+      
+      localStorage.setItem('kioskeys_logo', logoUrl);
+      showSuccess('Logo guardado correctamente');
     }
 
     // Cargar configuración guardada
     function loadSavedSettings() {
+      // Cargar colores
       const colors = JSON.parse(localStorage.getItem('kioskeys_colors'));
       if (colors) {
         document.getElementById('primaryColor').value = colors.primary;
@@ -287,12 +315,16 @@
         updateColorPreviews();
       }
 
-      const logos = JSON.parse(localStorage.getItem('kioskeys_logos'));
-      if (logos) {
-        document.getElementById('mainLogo').value = logos.main;
-        document.getElementById('favicon').value = logos.favicon;
-        document.getElementById('logoPreview').src = logos.main;
-        document.getElementById('faviconPreview').src = logos.favicon;
+      // Cargar logo
+      const logoUrl = localStorage.getItem('kioskeys_logo');
+      if (logoUrl) {
+        const logoPreview = document.getElementById('logoPreview');
+        const previewLogo = document.getElementById('previewLogo');
+        const navLogo = document.getElementById('navLogo');
+        
+        logoPreview.src = logoUrl;
+        previewLogo.src = logoUrl;
+        navLogo.src = logoUrl;
       }
     }
 
