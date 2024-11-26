@@ -6,15 +6,5 @@
   <title>Logo KiosKeys</title>
 </head>
 <body>
-  <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
-    <path d="M200 200 L400 400 L200 600" stroke="#003B8E" stroke-width="80" stroke-linecap="round"/>
-    <path d="M600 200 L400 400 L600 600" stroke="#00A3FF" stroke-width="80" stroke-linecap="round"/>
-    <text x="400" y="700" text-anchor="middle" font-family="Arial, sans-serif" font-size="120" font-weight="bold">
-      <tspan fill="#003B8E">KIOS</tspan><tspan fill="#00A3FF">KEYS</tspan>
-    </text>
-    <text x="400" y="780" text-anchor="middle" font-family="Arial, sans-serif" font-size="60" fill="#666666">
-      COPY KEYS
-    </text>
-  </svg>
-</body>
-</html>
+  <!-- Imagen SVG en formato Base64 -->
+  <img src="data:image/svg+xml;base64,FoxSjVDeEdBcU9qWXB5NWNibTlyblprWU8zandHU0c4b3lmUExHZHp1cWFSbEFRUURBWTI5ZmJsY3RtRyttQTQzSFZQNC9QUThYTkIrM1ZKcUNaVXhSTXlZSnB0cmEwQzRHYy9mL3ZTOVZGSkVvZ1FHVWMydEhuZzBQNDlCS0RINDE2cDFIZi9ybXZDcjQyQ1FGUytj
