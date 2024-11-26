@@ -7,10 +7,11 @@
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>UPLOADCARE_PUBLIC_KEY = '1985ca48f4d597426e30';</script>
   <style>
     .admin-container {
-      max-width: 1200px;
+      max-width: 800px;
       margin: 0 auto;
       padding: 20px;
       background: rgba(255, 255, 255, 0.95);
@@ -18,118 +19,96 @@
       backdrop-filter: blur(10px);
     }
 
-    .brand-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .brand-item {
+    .logo-editor {
       background: white;
-      padding: 20px;
+      padding: 24px;
       border-radius: 8px;
-      text-align: center;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+      text-align: center;
     }
 
-    .brand-logo {
-      width: 150px;
-      height: 100px;
-      object-fit: contain;
-      margin: 10px auto;
+    .logo-preview {
+      max-width: 300px;
+      height: auto;
+      margin: 20px auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 16px;
+      background: #f8f9fa;
     }
 
-    .brand-name {
-      font-weight: 600;
-      margin: 10px 0;
+    .logo-preview img {
+      max-width: 100%;
+      height: auto;
     }
 
-    .edit-field {
-      width: 100%;
-      padding: 8px;
-      margin: 5px 0;
-      border: 1px solid #ddd;
-      border-radius: 4px;
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin: 8px;
     }
 
-    .save-button {
+    .button-primary {
       background: var(--primary-blue);
       color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 10px;
-      width: 100%;
     }
 
-    .save-button:hover {
+    .button-primary:hover {
       opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .button-secondary {
+      background: #6c757d;
+      color: white;
     }
 
     .success-message {
       background: #d4edda;
       color: #155724;
-      padding: 10px;
+      padding: 12px;
       border-radius: 6px;
-      margin: 10px 0;
+      margin: 16px 0;
       display: none;
     }
 
-    .add-brand-button {
-      background: var(--primary-blue);
-      color: white;
-      padding: 12px 24px;
-      border: none;
+    .error-message {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 12px;
       border-radius: 6px;
-      cursor: pointer;
-      margin-bottom: 20px;
-      font-size: 16px;
+      margin: 16px 0;
+      display: none;
     }
 
-    .models-input {
-      height: 80px;
-      resize: vertical;
+    .current-logo {
+      margin-bottom: 24px;
+      padding: 16px;
+      background: #f8f9fa;
+      border-radius: 8px;
     }
 
-    .image-uploader {
-      margin: 10px 0;
+    .current-logo h3 {
+      margin-bottom: 16px;
+      color: var(--primary-blue);
     }
 
-    .preview-container {
-      margin: 10px 0;
-      padding: 10px;
-      border: 1px dashed #ddd;
-      border-radius: 4px;
-      text-align: center;
-    }
-
-    .preview-image {
-      max-width: 100%;
-      height: auto;
-      margin: 10px 0;
-    }
-
-    .upload-button {
+    .uploadcare--widget {
       display: inline-block;
-      padding: 8px 16px;
-      background: var(--primary-blue);
-      color: white;
-      border-radius: 4px;
-      cursor: pointer;
-      margin: 5px 0;
-    }
-
-    .upload-button:hover {
-      opacity: 0.9;
+      margin: 16px 0;
     }
   </style>
 </head>
 <body>
   <nav>
     <div class="logo">
-      <a href="/"><img src="/logo.svg" alt="Kioskeys"></a>
+      <a href="/"><img src="/logo.svg" alt="Kioskeys" id="navLogo"></a>
     </div>
     <div class="nav-links">
       <a href="/">Inicio</a>
@@ -142,127 +121,129 @@
     <section class="hero">
       <div class="hero-content">
         <h1>Editor de Logos</h1>
-        <p>Gestiona los logos de marcas y vehículos</p>
+        <p>Gestiona el logo principal del sitio</p>
       </div>
     </section>
 
     <section class="main-content">
       <div class="admin-container">
-        <button class="add-brand-button" onclick="addNewBrand()">
-          <i class="fas fa-plus"></i> Agregar Nueva Marca
-        </button>
-        
-        <div id="successMessage" class="success-message"></div>
-        
-        <div class="brand-grid" id="brandGrid"></div>
+        <div class="logo-editor">
+          <div class="current-logo">
+            <h3>Logo Actual</h3>
+            <div class="logo-preview">
+              <img id="currentLogo" src="/logo.svg" alt="Logo actual">
+            </div>
+          </div>
+
+          <div class="upload-section">
+            <h3>Subir Nuevo Logo</h3>
+            <input type="hidden" role="uploadcare-uploader" 
+                   data-images-only="true"
+                   data-crop="free"
+                   data-preview-step="true"
+                   id="logoUploader">
+            
+            <div class="logo-preview">
+              <img id="newLogoPreview" src="" alt="Vista previa del nuevo logo" style="display: none;">
+            </div>
+
+            <button id="saveButton" class="button button-primary" style="display: none;" onclick="saveLogo()">
+              <i class="fas fa-save"></i> Guardar Cambios
+            </button>
+          </div>
+
+          <div id="successMessage" class="success-message"></div>
+          <div id="errorMessage" class="error-message"></div>
+        </div>
       </div>
     </section>
   </main>
 
   <script>
-    // Mostrar mensaje de éxito
-    function showSuccess(message) {
-      const successMsg = document.getElementById('successMessage');
-      successMsg.textContent = message;
-      successMsg.style.display = 'block';
-      setTimeout(() => successMsg.style.display = 'none', 3000);
-    }
-
-    // Agregar nueva marca
-    function addNewBrand() {
-      const brands = JSON.parse(localStorage.getItem('kioskeys_brands')) || [];
-      const newBrand = {
-        name: 'Nueva Marca',
-        type: 'car',
-        logo: 'https://via.placeholder.com/150x100?text=Nuevo+Logo',
-        models: ['Modelo 1', 'Modelo 2']
-      };
-      brands.push(newBrand);
-      localStorage.setItem('kioskeys_brands', JSON.stringify(brands));
-      renderBrands();
-      showSuccess('Nueva marca agregada');
-    }
-
-    // Guardar cambios de una marca
-    function saveBrand(index) {
-      const brands = JSON.parse(localStorage.getItem('kioskeys_brands')) || [];
+    let newLogoUrl = '';
+    
+    // Inicializar widget de Uploadcare
+    const widget = uploadcare.Widget('[role=uploadcare-uploader]');
+    
+    widget.onUploadComplete((fileInfo) => {
+      // Guardar URL del nuevo logo
+      newLogoUrl = fileInfo.cdnUrl;
       
-      brands[index] = {
-        name: document.getElementById(`name-${index}`).value,
-        type: document.getElementById(`type-${index}`).value,
-        logo: document.getElementById(`logo-${index}`).value,
-        models: document.getElementById(`models-${index}`).value.split('\n').filter(m => m.trim())
-      };
+      // Mostrar vista previa
+      const preview = document.getElementById('newLogoPreview');
+      preview.src = newLogoUrl;
+      preview.style.display = 'block';
+      
+      // Mostrar botón de guardar
+      document.getElementById('saveButton').style.display = 'inline-block';
+    });
 
-      localStorage.setItem('kioskeys_brands', JSON.stringify(brands));
-      showSuccess('Cambios guardados');
-      renderBrands();
-    }
-
-    // Eliminar marca
-    function deleteBrand(index) {
-      if (confirm('¿Estás seguro de que quieres eliminar esta marca?')) {
-        const brands = JSON.parse(localStorage.getItem('kioskeys_brands')) || [];
-        brands.splice(index, 1);
-        localStorage.setItem('kioskeys_brands', JSON.stringify(brands));
-        renderBrands();
-        showSuccess('Marca eliminada');
+    // Función para guardar el logo
+    function saveLogo() {
+      if (!newLogoUrl) {
+        showError('Por favor, sube un nuevo logo primero');
+        return;
       }
+
+      // Confirmar cambio
+      Swal.fire({
+        title: '¿Guardar nuevo logo?',
+        text: 'Esta acción actualizará el logo en todo el sitio',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Guardar URL en localStorage
+          localStorage.setItem('kioskeys_logo', newLogoUrl);
+          
+          // Actualizar logos en la página
+          updateLogos(newLogoUrl);
+          
+          // Mostrar mensaje de éxito
+          Swal.fire({
+            title: '¡Logo actualizado!',
+            text: 'El logo se ha actualizado correctamente',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        }
+      });
     }
 
-    // Inicializar uploader para una marca
-    function initializeUploader(index) {
-      const widget = uploadcare.Widget(`[role=uploadcare-uploader][data-index="${index}"]`);
+    // Función para actualizar logos en la página
+    function updateLogos(url) {
+      // Actualizar logo actual
+      document.getElementById('currentLogo').src = url;
       
-      widget.onUploadComplete(function(info) {
-        document.getElementById(`logo-${index}`).value = info.cdnUrl;
-        document.getElementById(`preview-${index}`).src = info.cdnUrl;
-        showSuccess('Logo actualizado');
-      });
+      // Actualizar logo en la navegación
+      document.getElementById('navLogo').src = url;
+      
+      // Limpiar vista previa y ocultar botón
+      document.getElementById('newLogoPreview').style.display = 'none';
+      document.getElementById('saveButton').style.display = 'none';
+      
+      // Resetear widget
+      widget.value(null);
     }
 
-    // Renderizar marcas
-    function renderBrands() {
-      const brands = JSON.parse(localStorage.getItem('kioskeys_brands')) || [];
-      const grid = document.getElementById('brandGrid');
-      grid.innerHTML = '';
-
-      brands.forEach((brand, index) => {
-        const brandElement = document.createElement('div');
-        brandElement.className = 'brand-item';
-        brandElement.innerHTML = `
-          <img src="${brand.logo}" alt="${brand.name}" class="brand-logo" id="preview-${index}">
-          
-          <input type="text" class="edit-field" id="name-${index}" 
-                 value="${brand.name}" placeholder="Nombre de la marca">
-          
-          <input type="hidden" id="logo-${index}" value="${brand.logo}">
-          <input type="hidden" role="uploadcare-uploader" data-index="${index}">
-          
-          <select class="edit-field" id="type-${index}">
-            <option value="car" ${brand.type === 'car' ? 'selected' : ''}>Auto</option>
-            <option value="motorcycle" ${brand.type === 'motorcycle' ? 'selected' : ''}>Moto</option>
-            <option value="truck" ${brand.type === 'truck' ? 'selected' : ''}>Camión</option>
-          </select>
-          
-          <textarea class="edit-field models-input" id="models-${index}" 
-                    placeholder="Modelos (uno por línea)">${brand.models.join('\n')}</textarea>
-          
-          <button class="save-button" onclick="saveBrand(${index})">
-            <i class="fas fa-save"></i> Guardar Cambios
-          </button>
-          
-          <button class="save-button" onclick="deleteBrand(${index})" style="background: #dc3545; margin-top: 5px;">
-            <i class="fas fa-trash"></i> Eliminar
-          </button>
-        `;
-        grid.appendChild(brandElement);
-        initializeUploader(index);
-      });
+    // Función para mostrar error
+    function showError(message) {
+      const errorMsg = document.getElementById('errorMessage');
+      errorMsg.textContent = message;
+      errorMsg.style.display = 'block';
+      setTimeout(() => errorMsg.style.display = 'none', 3000);
     }
 
-    // Inicializar
-    document.addEventListener('DOMContentLoaded', renderBrands);
+    // Cargar logo guardado al iniciar
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedLogo = localStorage.getItem('kioskeys_logo');
+      if (savedLogo) {
+        updateLogos(savedLogo);
+      }
+    });
   </script>
 </body>
 </html>
