@@ -21,6 +21,7 @@
       text-align: center;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .admin-card:hover {
@@ -55,6 +56,8 @@
       text-decoration: none;
       font-size: 14px;
       transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
     }
 
     .admin-button:hover {
@@ -99,6 +102,10 @@
     #adminContent {
       display: none;
     }
+
+    .admin-card.clickable {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -137,25 +144,25 @@
         <!-- Admin Content -->
         <div id="adminContent">
           <div class="admin-grid">
-            <div class="admin-card">
+            <div class="admin-card clickable" onclick="navigateTo('/pages/admin/logos-simple.html')">
               <i class="fas fa-images admin-icon"></i>
               <div class="admin-title">Editor de Logos</div>
               <p class="admin-description">Gestiona los logos de marcas y vehículos</p>
-              <a href="/pages/admin/logos-simple.html" class="admin-button">Administrar</a>
+              <button class="admin-button">Administrar</button>
             </div>
 
-            <div class="admin-card">
+            <div class="admin-card clickable" onclick="navigateTo('/pages/admin/productos.html')">
               <i class="fas fa-box admin-icon"></i>
               <div class="admin-title">Productos</div>
               <p class="admin-description">Administra el catálogo de productos</p>
-              <a href="/pages/admin/productos.html" class="admin-button">Administrar</a>
+              <button class="admin-button">Administrar</button>
             </div>
 
-            <div class="admin-card">
+            <div class="admin-card clickable" onclick="navigateTo('/pages/admin/apariencia.html')">
               <i class="fas fa-paint-brush admin-icon"></i>
               <div class="admin-title">Apariencia</div>
               <p class="admin-description">Personaliza colores y estilos del sitio</p>
-              <a href="/pages/admin/apariencia.html" class="admin-button">Personalizar</a>
+              <button class="admin-button">Personalizar</button>
             </div>
           </div>
         </div>
@@ -164,9 +171,10 @@
   </main>
 
   <script>
-    // Contraseña de acceso (cámbiala por una segura)
+    // Contraseña de acceso
     const ACCESS_PASSWORD = 'kioskeys2024';
     
+    // Función para verificar acceso
     function verifyAccess() {
       const password = document.getElementById('password').value;
       const errorMessage = document.getElementById('errorMessage');
@@ -188,11 +196,27 @@
       }
     }
 
+    // Función para navegar a otra página
+    function navigateTo(url) {
+      if (sessionStorage.getItem('adminAuthenticated') === 'true') {
+        window.location.href = url;
+      } else {
+        alert('Debes iniciar sesión para acceder a esta sección');
+      }
+    }
+
     // Verificar estado de autenticación al cargar
     document.addEventListener('DOMContentLoaded', () => {
       if (sessionStorage.getItem('adminAuthenticated') === 'true') {
         document.getElementById('loginForm').style.display = 'none';
         document.getElementById('adminContent').style.display = 'block';
+      }
+    });
+
+    // Manejar tecla Enter en el campo de contraseña
+    document.getElementById('password').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        verifyAccess();
       }
     });
   </script>
