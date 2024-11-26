@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administrar Productos - Kioskeys</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .admin-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .button {
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .button-primary {
+      background: var(--primary-blue);
+      color: white;
+    }
+
+    .button-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .product-form {
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+    }
+
+    .features-container {
+      margin-top: 16px;
+    }
+
+    .feature-input {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .feature-input button {
+      padding: 8px;
+      border: none;
+      background: #dc3545;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .product-details {
+      padding: 16px;
+    }
+
+    .product-actions {
+      padding: 16px;
+      background: #f8f9fa;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 8px;
+    }
+
+    .success-message {
+      padding: 12px;
+      background: #d4edda;
+      color: #155724;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .error-message {
+      padding: 12px;
+      background: #f8d7da;
+      color: #721c24;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <a href="/"><img src="/logo.svg" alt="Kioskeys"></a>
+    </div>
+    <div class="nav-links">
+      <a href="/">Inicio</a>
+      <a href="/pages/admin/dashboard.html">Dashboard</a>
+      <a href="/pages/admin/productos.html" class="active">Productos</a>
+      <a href="/pages/admin/apariencia.html">Apariencia</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Administrar Productos</h1>
+        <p>Gestiona el catálogo de productos</p>
+      </div>
+    </section>
+
+    <section class="main-content">
+      <div class="admin-container">
+        <div id="successMessage" class="success-message"></div>
+        <div id="errorMessage" class="error-message"></div>
+
+        <div class="product-form">
+          <h3>Agregar/Editar Producto</h3>
+          <form id="productForm" onsubmit="handleSubmit(event)">
+            <input type="hidden" id="productId">
+            
+            <div class="form-group">
+              <label for="productName">Nombre del Producto</label>
+              <input type="text" id="productName" required>
+            </div>
+
+            <div class="form-group">
+              <label for="productCategory">Categoría</label>
+              <select id="productCategory" required>
+                <option value="llaves">Llaves</option>
+                <option value="carcasas">Carcasas</option>
+                <option value="accesorios">Accesorios</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="productImage">URL de la Imagen</label>
+              <input type="url" id="productImage" required>
+            </div>
+
+            <div class="form-group">
+              <label for="productDescription">Descripción</label>
+              <textarea id="productDescription" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="productPrice">Precio</label>
+              <input type="number" id="productPrice" step="0.01" required>
+            </div>
+
+            <div class="features-container">
+              <label>Características</label>
+              <div id="featuresContainer">
+                <div class="feature-input">
+                  <input type="text" placeholder="Característica">
+                  <button type="button" onclick="removeFeature(this)">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <button type="button" class="button button-primary" onclick="addFeature()">
+                <i class="fas fa-plus"></i> Agregar Característica
+              </button>
+            </div>
+
+            <button type="submit" class="button button-primary" style="margin-top: 16px;">
+              <i class="fas fa-save"></i> Guardar Producto
+            </button>
+          </form>
+        </div>
+
+        <div class="products-grid" id="productsGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Mostrar mensajes
+    function showMessage(message, isError = false) {
+      const successMsg = document.getElementById('successMessage');
+      const errorMsg = document.getElementById('errorMessage');
+      
+      if (isError) {
+        errorMsg.textContent = message;
+        errorMsg.style.display = 'block';
+        setTimeout(() => errorMsg.style.display = 'none', 3000);
+      } else {
+        successMsg.textContent = message;
+        successMsg.style.display = 'block';
+        setTimeout(() => successMsg.style.display = 'none', 3000);
+      }
+    }
+
+    // Agregar característica
+    function addFeature() {
+      const container = document.getElementById('featuresContainer');
+      const featureInput = document.createElement('div');
+      featureInput.className = 'feature-input';
+      featureInput.innerHTML = `
+        <input type="text" placeholder="Característica">
+        <button type="button" onclick="removeFeature(this)">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      container.appendChild(featureInput);
+    }
+
+    // Eliminar característica
+    function removeFeature(button) {
+      button.parentElement.remove();
+    }
+
+    // Manejar envío del formulario
+    function handleSubmit(event) {
+      event.preventDefault();
+      
+      const features = Array.from(document.querySelectorAll('.feature-input input'))
+        .map(input => input.value.trim())
+        .filter(feature => feature);
+
+      const product = {
+        id: document.getElementById('productId').value || Date.now().toString(),
+        name: document.getElementById('productName').value,
+        category: document.getElementById('productCategory').value,
+        image: document.getElementById('productImage').value,
+        description: document.getElementById('productDescription').value,
+        features: features,
+        price: parseFloat(document.getElementById('productPrice').value)
+      };
+
+      let products = JSON.parse(localStorage.getItem('kioskeys_products')) || [];
+
+      if (product.id && products.some(p => p.id === product.id)) {
+        // Actualizar producto existente
+        products = products.map(p => p.id === product.id ? product : p);
+        showMessage('Producto actualizado correctamente');
+      } else {
+        // Agregar nuevo producto
+        products.push(product);
+        showMessage('Producto agregado correctamente');
+      }
+
+      localStorage.setItem('kioskeys_products', JSON.stringify(products));
+      
+      document.getElementById('productForm').reset();
+      document.getElementById('productId').value = '';
+      document.getElementById('featuresContainer').innerHTML = `
+        <div class="feature-input">
+          <input type="text" placeholder="Característica">
+          <button type="button" onclick="removeFeature(this)">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `;
+      
+      renderProducts();
+    }
+
+    // Editar producto
+    function editProduct(id) {
+      const products = JSON.parse(localStorage.getItem('kioskeys_products')) || [];
+      const product = products.find(p => p.id === id);
+      
+      if (product) {
+        document.getElementById('productId').value = product.id;
+        document.getElementById('productName').value = product.name;
+        document.getElementById('productCategory').value = product.category;
+        document.getElementById('productImage').value = product.image;
+        document.getElementById('productDescription').value = product.description;
+        document.getElementById('productPrice').value = product.price;
+
+        const featuresContainer = document.getElementById('featuresContainer');
+        featuresContainer.innerHTML = '';
+        
+        product.features.forEach(feature => {
+          const featureInput = document.createElement('div');
+          featureInput.className = 'feature-input';
+          featureInput.innerHTML = `
+            <input type="text" value="${feature}" placeholder="Característica">
+            <button type="button" onclick="removeFeature(this)">
+              <i class="fas fa-times"></i>
+            </button>
+          `;
+          featuresContainer.appendChild(featureInput);
+        });
+      }
+    }
+
+    // Eliminar producto
+    function deleteProduct(id) {
+      if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+        let products = JSON.parse(localStorage.getItem('kioskeys_products')) || [];
+        products = products.filter(p => p.id !== id);
+        localStorage.setItem('kioskeys_products', JSON.stringify(products));
+        showMessage('Producto eliminado correctamente');
+        renderProducts();
+      }
+    }
+
+    // Renderizar productos
+    function renderProducts() {
+      const products = JSON.parse(localStorage.getItem('kioskeys_products')) || [];
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '';
+
+      products.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" class="product-image"
+               onerror="this.src='https://via.placeholder.com/300x200?text=Error+Imagen'">
+          <div class="product-details">
+            <h3>${product.name}</h3>
+            <p>${product.description}</p>
+            <p><strong>Precio:</strong> $${product.price}</p>
+            <p><strong>Categoría:</strong> ${product.category}</p>
+          </div>
+          <div class="product-actions">
+            <button class="button button-primary" onclick="editProduct('${product.id}')">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="button button-danger" onclick="deleteProduct('${product.id}')">
+              <i class="fas fa-trash"></i> Eliminar
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Inicializar
+    document.addEventListener('DOMContentLoaded', renderProducts);
+  </script>
+</body>
+</html>
