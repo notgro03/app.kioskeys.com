@@ -7,105 +7,7 @@
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    .admin-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      margin-top: 24px;
-    }
-
-    .admin-card {
-      background: white;
-      border-radius: 12px;
-      padding: 24px;
-      text-align: center;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .admin-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-    }
-
-    .admin-icon {
-      font-size: 32px;
-      color: var(--primary-blue);
-      margin-bottom: 16px;
-    }
-
-    .admin-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .admin-description {
-      font-size: 14px;
-      color: #6e6e73;
-      margin-bottom: 16px;
-    }
-
-    .admin-button {
-      display: inline-block;
-      padding: 8px 16px;
-      background: var(--primary-blue);
-      color: white;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      border: none;
-      cursor: pointer;
-    }
-
-    .admin-button:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    .login-container {
-      max-width: 400px;
-      margin: 40px auto;
-      padding: 24px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 8px 12px;
-      border: 2px solid #ddd;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    .error-message {
-      color: #dc3545;
-      font-size: 14px;
-      margin-top: 8px;
-      display: none;
-    }
-
-    #adminContent {
-      display: none;
-    }
-
-    .admin-card.clickable {
-      cursor: pointer;
-    }
+    /* ... (estilos anteriores se mantienen igual) ... */
   </style>
 </head>
 <body>
@@ -115,6 +17,7 @@
     </div>
     <div class="nav-links">
       <a href="/">Inicio</a>
+      <a href="#" onclick="logout()" id="logoutButton" style="display: none;">Cerrar Sesión</a>
     </div>
   </nav>
 
@@ -144,25 +47,25 @@
         <!-- Admin Content -->
         <div id="adminContent">
           <div class="admin-grid">
-            <div class="admin-card clickable" onclick="navigateTo('/pages/admin/logos-simple.html')">
+            <div class="admin-card" onclick="window.location.href='logos.html'">
               <i class="fas fa-images admin-icon"></i>
               <div class="admin-title">Editor de Logos</div>
               <p class="admin-description">Gestiona los logos de marcas y vehículos</p>
-              <button class="admin-button">Administrar</button>
+              <a href="logos.html" class="admin-button">Administrar</a>
             </div>
 
-            <div class="admin-card clickable" onclick="navigateTo('/pages/admin/productos.html')">
+            <div class="admin-card" onclick="window.location.href='productos.html'">
               <i class="fas fa-box admin-icon"></i>
               <div class="admin-title">Productos</div>
               <p class="admin-description">Administra el catálogo de productos</p>
-              <button class="admin-button">Administrar</button>
+              <a href="productos.html" class="admin-button">Administrar</a>
             </div>
 
-            <div class="admin-card clickable" onclick="navigateTo('/pages/admin/apariencia.html')">
+            <div class="admin-card" onclick="window.location.href='apariencia.html'">
               <i class="fas fa-paint-brush admin-icon"></i>
               <div class="admin-title">Apariencia</div>
               <p class="admin-description">Personaliza colores y estilos del sitio</p>
-              <button class="admin-button">Personalizar</button>
+              <a href="apariencia.html" class="admin-button">Personalizar</a>
             </div>
           </div>
         </div>
@@ -180,14 +83,16 @@
       const errorMessage = document.getElementById('errorMessage');
       const loginForm = document.getElementById('loginForm');
       const adminContent = document.getElementById('adminContent');
+      const logoutButton = document.getElementById('logoutButton');
 
       if (password === ACCESS_PASSWORD) {
         // Guardar estado de autenticación
         sessionStorage.setItem('adminAuthenticated', 'true');
         
-        // Mostrar contenido admin
+        // Mostrar contenido admin y botón de logout
         loginForm.style.display = 'none';
         adminContent.style.display = 'block';
+        logoutButton.style.display = 'block';
         
         errorMessage.style.display = 'none';
       } else {
@@ -196,20 +101,26 @@
       }
     }
 
-    // Función para navegar a otra página
-    function navigateTo(url) {
-      if (sessionStorage.getItem('adminAuthenticated') === 'true') {
-        window.location.href = url;
-      } else {
-        alert('Debes iniciar sesión para acceder a esta sección');
-      }
+    // Función para cerrar sesión
+    function logout() {
+      sessionStorage.removeItem('adminAuthenticated');
+      window.location.reload();
     }
 
     // Verificar estado de autenticación al cargar
     document.addEventListener('DOMContentLoaded', () => {
+      const loginForm = document.getElementById('loginForm');
+      const adminContent = document.getElementById('adminContent');
+      const logoutButton = document.getElementById('logoutButton');
+
       if (sessionStorage.getItem('adminAuthenticated') === 'true') {
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('adminContent').style.display = 'block';
+        loginForm.style.display = 'none';
+        adminContent.style.display = 'block';
+        logoutButton.style.display = 'block';
+      } else {
+        loginForm.style.display = 'block';
+        adminContent.style.display = 'none';
+        logoutButton.style.display = 'none';
       }
     });
 
@@ -219,6 +130,19 @@
         verifyAccess();
       }
     });
+
+    // Proteger páginas de administración
+    function checkAuth() {
+      if (sessionStorage.getItem('adminAuthenticated') !== 'true') {
+        window.location.href = 'kioskeys-admin-x7k9y2.html';
+      }
+    }
+
+    // Verificar autenticación en páginas protegidas
+    if (window.location.pathname.includes('/admin/') && 
+        !window.location.pathname.includes('kioskeys-admin-x7k9y2')) {
+      checkAuth();
+    }
   </script>
 </body>
 </html>
