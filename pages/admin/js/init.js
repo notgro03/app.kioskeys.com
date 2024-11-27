@@ -1,112 +1,109 @@
-import { initializeUploader } from './upload.js';
 import { stateManager } from './state.js';
-import { UPLOADCARE_CONFIG } from './config.js';
+import { brandsManager } from './brands-manager.js';
+import { logoManager } from './logo-manager.js';
+import { productsManager } from './products-manager.js';
+import { initializeUploadcare } from './ui.js';
 
 export function initializeAdmin() {
-  // Set Uploadcare public key
-  window.UPLOADCARE_PUBLIC_KEY = UPLOADCARE_CONFIG.publicKey;
-
-  // Initialize theme
-  const { theme } = stateManager.getState();
-  stateManager.applyTheme(theme);
-
-  // Initialize logo
-  const { logo } = stateManager.getState();
-  stateManager.applyLogo(logo);
-
-  // Initialize logo uploader
-  initializeUploader('#logoUploader', {
-    crop: '1:1',
-    onSuccess: (fileInfo) => {
-      stateManager.updateLogo(fileInfo.cdnUrl);
+  // Initialize Uploadcare widgets
+  document.querySelectorAll('[role=uploadcare-uploader]').forEach(element => {
+    const widget = initializeUploadcare(element);
+    
+    if (element.id === 'logoUploader') {
+      widget.onUploadComplete((fileInfo) => {
+        logoManager.updateLogo(fileInfo.cdnUrl);
+      });
     }
   });
 
-  // Initialize color pickers
-  const primaryColor = document.getElementById('primaryColor');
-  const secondaryColor = document.getElementById('secondaryColor');
-  
-  if (primaryColor && secondaryColor) {
-    primaryColor.value = theme.primaryColor;
-    secondaryColor.value = theme.secondaryColor;
-    
-    function updateColorPreviews() {
-      document.getElementById('primaryPreview').style.backgroundColor = primaryColor.value;
-      document.getElementById('secondaryPreview').style.backgroundColor = secondaryColor.value;
-    }
-    
-    primaryColor.addEventListener('input', updateColorPreviews);
-    secondaryColor.addEventListener('input', updateColorPreviews);
-    updateColorPreviews();
-  }
-
-  // Subscribe to state changes
-  stateManager.subscribe((state) => {
-    // Update UI when state changes
-    if (primaryColor) primaryColor.value = state.theme.primaryColor;
-    if (secondaryColor) secondaryColor.value = state.theme.secondaryColor;
-    
-    // Update products list
-    const productsList = document.getElementById('productsList');
-    if (productsList) {
-      renderProducts(state.products);
-    }
-
-    // Update brands list
-    const brandsList = document.getElementById('brandsList');
-    if (brandsList) {
-      renderBrands(state.brands);
-    }
-  });
-
-  // Initialize tabs
-  document.querySelectorAll('.tab-button').forEach(button => {
-    button.addEventListener('click', () => {
-      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-
-      const tabName = button.dataset.tab;
-      document.querySelectorAll('[data-section]').forEach(section => {
-        section.style.display = section.dataset.section === tabName ? 'block' : 'none';
+  // Initialize brand management
+  const brandForm = document.getElementById('brandForm');
+  if (brandForm) {
+    brandForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      brandsManager.addBrand({
+        name: formData.get('brandName'),
+        logo: formData.get('brandLogo'),
+        type: formData.get('brandType')
       });
     });
-  });
+  }
+
+  // Initialize product management
+  const productForm = document.getElementById('productForm');
+  if (productForm) {
+    productForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      productsManager.addProduct(formData.get('type'), {
+        name: formData.get('name'),
+        brand: formData.get('brand'),
+        model: formData.get('model'),
+        year: formData.get('year'),
+        price: parseFloat(formData.get('price')),
+        description: formData.get('description'),
+        image: formData.get('image')
+      });
+    });
+  }
+
+  // Apply initial state
+  stateManager.applyCurrentState();
+
+  // Render initial data
+  renderBrands();
+  renderProducts();
 }
 
-function renderProducts(products) {
-  const productsList = document.getElementById('productsList');
-  if (!productsList) return;
+function renderBrands() {
+  const brandsGrid = document.getElementById('brandsGrid');
+  if (!brandsGrid) return;
 
-  productsList.innerHTML = products.map(product => `
-    <div class="product-card">
-      <img src="${product.image}" alt="${product.brand} ${product.model}" class="product-image">
-      <div class="product-content">
-        <h3>${product.brand} ${product.model} ${product.year}</h3>
-        <p>${product.description}</p>
-        <p>Precio: $${product.price}</p>
-      </div>
-      <div class="product-actions">
-        <button class="btn btn-primary" onclick="editProduct('${product.id}')">Editar</button>
-        <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Eliminar</button>
+  const brands = brandsManager.getAllBrands();
+  brandsGrid.innerHTML = Object.entries(brands).map(([name, data]) => `
+    <div class="brand-item">
+      <img src="${data.logo}" alt="${name}" class="brand-logo">
+      <div class="brand-name">${name}</div>
+      <div class="brand-actions">
+        <button onclick="editBrand('${name}')" class="btn btn-primary">
+          <i class="fas fa-edit"></i> Editar
+        </button>
+        <button onclick="deleteBrand('${name}')" class="btn btn-danger">
+          <i class="fas fa-trash"></i> Eliminar
+        </button>
       </div>
     </div>
   `).join('');
 }
 
-function renderBrands(brands) {
-  const brandsList = document.getElementById('brandsList');
-  if (!brandsList) return;
+function renderProducts() {
+  const productsGrid = document.getElementById('productsGrid');
+  if (!productsGrid) return;
 
-  brandsList.innerHTML = Object.entries(brands).map(([name, data]) => `
-    <div class="brand-card">
-      <img src="${data.logo}" alt="${name}" class="brand-logo">
-      <div class="brand-content">
-        <h3>${name}</h3>
-        <p>${Object.keys(data.models).length} modelos</p>
-      </div>
-      <div class="brand-actions">
-        <button class="btn btn-primary" onclick="editBrand('${name}')">Editar</button>
-        <button class="btn btn-danger" onclick="deleteBrand('${name}')">Eliminar</button>
+  const products = productsManager.getAllProducts();
+  productsGrid.innerHTML = Object.entries(products).map(([type, items]) => `
+    <div class="products-section">
+      <h3>${type.charAt(0).toUpperCase() + type.slice(1)}</h3>
+      <div class="products-grid">
+        ${items.map(product => `
+          <div class="product-card">
+            <img src="${product.image}" alt="${product.name}" class="product-image">
+            <div class="product-details">
+              <h4>${product.name}</h4>
+              <p>${product.description}</p>
+              <div class="product-price">$${product.price}</div>
+            </div>
+            <div class="product-actions">
+              <button onclick="editProduct('${type}', '${product.id}')" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Editar
+              </button>
+              <button onclick="deleteProduct('${type}', '${product.id}')" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Eliminar
+              </button>
+            </div>
+          </div>
+        `).join('')}
       </div>
     </div>
   `).join('');

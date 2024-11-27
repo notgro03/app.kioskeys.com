@@ -2,10 +2,13 @@ import Swal from 'sweetalert2';
 
 export function showSuccess(message, timer = 2000) {
   return Swal.fire({
-    title: message,
+    title: '¡Éxito!',
+    text: message,
     icon: 'success',
     timer,
-    showConfirmButton: false
+    showConfirmButton: false,
+    position: 'top-end',
+    toast: true
   });
 }
 
@@ -13,7 +16,11 @@ export function showError(message) {
   return Swal.fire({
     title: 'Error',
     text: message,
-    icon: 'error'
+    icon: 'error',
+    position: 'top-end',
+    toast: true,
+    timer: 3000,
+    showConfirmButton: false
   });
 }
 
@@ -43,4 +50,17 @@ export function updatePreview(imageUrl, previewElement) {
       img.src = 'https://via.placeholder.com/200x200?text=Error+de+imagen';
     };
   }
+}
+
+export function initializeUploadcare(element, options = {}) {
+  const widget = uploadcare.Widget(element, {
+    publicKey: '1985ca48f4d597426e30',
+    tabs: 'file url',
+    previewStep: true,
+    clearable: true,
+    multiple: false,
+    ...options
+  });
+
+  return widget;
 }
