@@ -26,5 +26,6 @@ export const UPLOADCARE_CONFIG = {
   previewStep: true,
   clearable: true,
   multiple: false,
-  imagesOnly: true
+  imagesOnly: true,
+  crop: '16:9'
 };

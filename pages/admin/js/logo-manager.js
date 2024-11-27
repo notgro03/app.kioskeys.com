@@ -1,5 +1,6 @@
 import { STORAGE_KEYS } from './config.js';
 import { showSuccess, showError } from './ui.js';
+import { stateManager } from './state.js';
 
 class LogoManager {
   constructor() {
@@ -12,24 +13,38 @@ class LogoManager {
   }
 
   initializeWidget() {
+    if (typeof uploadcare === 'undefined') {
+      console.error('Uploadcare widget not loaded');
+      return;
+    }
+
     const widget = uploadcare.Widget('[role=uploadcare-uploader]', {
       publicKey: '1985ca48f4d597426e30',
       tabs: 'file url',
       previewStep: true,
       clearable: true,
       multiple: false,
-      imagesOnly: true
+      imagesOnly: true,
+      crop: '16:9'
     });
 
     widget.onUploadComplete((fileInfo) => {
       this.updateLogo(fileInfo.cdnUrl);
     });
+
+    widget.onUploadFail((error) => {
+      console.error('Upload failed:', error);
+      showError('Error al subir el logo');
+    });
   }
 
-  updateLogo(logoUrl) {
+  async updateLogo(logoUrl) {
     try {
       // Update localStorage
       localStorage.setItem(STORAGE_KEYS.LOGO, logoUrl);
+      
+      // Update state manager
+      stateManager.updateState('logo', logoUrl);
       
       // Update all logo elements in the page
       document.querySelectorAll('[data-logo]').forEach(img => {
@@ -40,6 +55,13 @@ class LogoManager {
       const preview = document.getElementById('logoPreview');
       if (preview) {
         preview.src = logoUrl;
+        preview.style.display = 'block';
+      }
+
+      // Update nav logo
+      const navLogo = document.getElementById('navLogo');
+      if (navLogo) {
+        navLogo.src = logoUrl;
       }
 
       showSuccess('Logo actualizado correctamente');
