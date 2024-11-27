@@ -2,17 +2,41 @@ import { STORAGE_KEYS, DEFAULT_THEME, DEFAULT_LOGO } from './config.js';
 
 class StateManager {
   constructor() {
-    this.subscribers = new Set();
     this.state = this.loadInitialState();
+    this.subscribers = new Set();
   }
 
   loadInitialState() {
     return {
-      theme: JSON.parse(localStorage.getItem(STORAGE_KEYS.THEME)) || DEFAULT_THEME,
       logo: localStorage.getItem(STORAGE_KEYS.LOGO) || DEFAULT_LOGO,
-      products: JSON.parse(localStorage.getItem(STORAGE_KEYS.PRODUCTS)) || [],
-      brands: JSON.parse(localStorage.getItem(STORAGE_KEYS.BRANDS)) || {}
+      theme: JSON.parse(localStorage.getItem(STORAGE_KEYS.THEME)) || DEFAULT_THEME,
+      products: JSON.parse(localStorage.getItem(STORAGE_KEYS.PRODUCTS)) || {},
+      plans: JSON.parse(localStorage.getItem(STORAGE_KEYS.PLANS)) || {}
     };
+  }
+
+  initialize(initialState = {}) {
+    this.state = {
+      ...this.state,
+      ...initialState
+    };
+    this.saveState();
+  }
+
+  updateState(key, value) {
+    this.state[key] = value;
+    this.saveState();
+    this.notifySubscribers();
+  }
+
+  saveState() {
+    Object.entries(this.state).forEach(([key, value]) => {
+      localStorage.setItem(STORAGE_KEYS[key.toUpperCase()], JSON.stringify(value));
+    });
+  }
+
+  getState() {
+    return this.state;
   }
 
   subscribe(callback) {
@@ -20,80 +44,21 @@ class StateManager {
     return () => this.subscribers.delete(callback);
   }
 
-  notify() {
+  notifySubscribers() {
     this.subscribers.forEach(callback => callback(this.state));
   }
 
-  updateState(key, value) {
-    this.state[key] = value;
-    localStorage.setItem(STORAGE_KEYS[key.toUpperCase()], JSON.stringify(value));
-    this.notify();
-  }
-
-  getState() {
-    return this.state;
-  }
-
-  // Theme methods
-  updateTheme(theme) {
-    this.updateState('theme', theme);
-    this.applyTheme(theme);
-  }
-
-  applyTheme(theme) {
+  applyCurrentState() {
+    // Apply theme
+    const { theme } = this.state;
     document.documentElement.style.setProperty('--primary-blue', theme.primaryColor);
     document.documentElement.style.setProperty('--secondary-blue', theme.secondaryColor);
-    document.documentElement.style.setProperty('--text-color', theme.textColor);
-  }
 
-  // Logo methods
-  updateLogo(logoUrl) {
-    this.updateState('logo', logoUrl);
-    this.applyLogo(logoUrl);
-  }
-
-  applyLogo(logoUrl) {
+    // Apply logo
+    const { logo } = this.state;
     document.querySelectorAll('[data-logo]').forEach(img => {
-      img.src = logoUrl;
+      img.src = logo;
     });
-  }
-
-  // Products methods
-  addProduct(product) {
-    const products = [...this.state.products, product];
-    this.updateState('products', products);
-  }
-
-  updateProduct(id, updatedProduct) {
-    const products = this.state.products.map(p => 
-      p.id === id ? { ...p, ...updatedProduct } : p
-    );
-    this.updateState('products', products);
-  }
-
-  deleteProduct(id) {
-    const products = this.state.products.filter(p => p.id !== id);
-    this.updateState('products', products);
-  }
-
-  // Brands methods
-  addBrand(brand, data) {
-    const brands = { ...this.state.brands, [brand]: data };
-    this.updateState('brands', brands);
-  }
-
-  updateBrand(brand, data) {
-    const brands = { 
-      ...this.state.brands,
-      [brand]: { ...this.state.brands[brand], ...data }
-    };
-    this.updateState('brands', brands);
-  }
-
-  deleteBrand(brand) {
-    const brands = { ...this.state.brands };
-    delete brands[brand];
-    this.updateState('brands', brands);
   }
 }
 
