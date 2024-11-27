@@ -1,37 +1,50 @@
 import { STORAGE_KEYS } from './config.js';
 import { saveToStorage, getFromStorage } from './storage.js';
-import { CAR_BRANDS } from './models.js';
 
-export function updateBrandLogo(brand, logoUrl) {
-  try {
-    const brands = getFromStorage(STORAGE_KEYS.BRANDS) || CAR_BRANDS;
-    if (brands[brand]) {
-      brands[brand].logo = logoUrl;
-      saveToStorage(STORAGE_KEYS.BRANDS, brands);
-      return true;
+export const BRANDS_DATA = {
+  'Toyota': {
+    models: {
+      'Corolla': ['2020', '2021', '2022', '2023'],
+      'Camry': ['2019', '2020', '2021', '2022', '2023'],
+      'RAV4': ['2018', '2019', '2020', '2021', '2022', '2023']
     }
-    return false;
-  } catch (error) {
-    console.error('Error updating brand logo:', error);
-    return false;
+  },
+  'Honda': {
+    models: {
+      'Civic': ['2019', '2020', '2021', '2022', '2023'],
+      'CR-V': ['2018', '2019', '2020', '2021', '2022', '2023']
+    }
+  },
+  'Volkswagen': {
+    models: {
+      'Golf': ['2018', '2019', '2020', '2021', '2022'],
+      'Polo': ['2019', '2020', '2021', '2022', '2023']
+    }
   }
+};
+
+export function getBrands() {
+  return getFromStorage(STORAGE_KEYS.BRANDS) || BRANDS_DATA;
 }
 
-export function getBrandLogo(brand) {
-  const brands = getFromStorage(STORAGE_KEYS.BRANDS) || CAR_BRANDS;
-  return brands[brand]?.logo;
-}
-
-export function getAllBrands() {
-  return getFromStorage(STORAGE_KEYS.BRANDS) || CAR_BRANDS;
-}
-
-export function getBrandModels(brand) {
-  const brands = getFromStorage(STORAGE_KEYS.BRANDS) || CAR_BRANDS;
+export function getModels(brand) {
+  const brands = getBrands();
   return brands[brand]?.models || {};
 }
 
-export function getModelYears(brand, model) {
-  const brands = getFromStorage(STORAGE_KEYS.BRANDS) || CAR_BRANDS;
-  return brands[brand]?.models[model] || [];
+export function getYears(brand, model) {
+  const models = getModels(brand);
+  return models[model] || [];
+}
+
+export function addBrand(brand, data) {
+  try {
+    const brands = getBrands();
+    brands[brand] = data;
+    saveToStorage(STORAGE_KEYS.BRANDS, brands);
+    return true;
+  } catch (error) {
+    console.error('Error adding brand:', error);
+    return false;
+  }
 }

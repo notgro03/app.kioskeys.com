@@ -1,13 +1,20 @@
 import { STORAGE_KEYS } from './config.js';
 import { saveToStorage, getFromStorage } from './storage.js';
-import { v4 as uuidv4 } from 'uuid';
+import { showSuccess, showError } from './ui.js';
 
-export function addProduct(productData) {
+export const PRODUCT_TYPES = {
+  KEY: 'llaves',
+  REMOTE: 'telemandos',
+  CASE: 'carcasas',
+  ACCESSORY: 'accesorios'
+};
+
+export function addProduct(data) {
   try {
     const products = getFromStorage(STORAGE_KEYS.PRODUCTS) || [];
     const newProduct = {
-      id: uuidv4(),
-      ...productData,
+      id: Date.now().toString(),
+      ...data,
       createdAt: new Date().toISOString()
     };
     
@@ -16,48 +23,51 @@ export function addProduct(productData) {
     return newProduct;
   } catch (error) {
     console.error('Error adding product:', error);
-    return null;
+    throw error;
   }
 }
 
-export function updateProduct(id, productData) {
+export function updateProduct(id, data) {
   try {
-    const products = getFromStorage(STORAGE_KEYS.PRODUCTS) || [];
+    let products = getFromStorage(STORAGE_KEYS.PRODUCTS) || [];
     const index = products.findIndex(p => p.id === id);
     
-    if (index === -1) return null;
-    
+    if (index === -1) {
+      throw new Error('Producto no encontrado');
+    }
+
     products[index] = {
       ...products[index],
-      ...productData,
+      ...data,
       updatedAt: new Date().toISOString()
     };
-    
+
     saveToStorage(STORAGE_KEYS.PRODUCTS, products);
     return products[index];
   } catch (error) {
     console.error('Error updating product:', error);
-    return null;
+    throw error;
   }
 }
 
 export function deleteProduct(id) {
   try {
-    const products = getFromStorage(STORAGE_KEYS.PRODUCTS) || [];
-    const newProducts = products.filter(p => p.id !== id);
-    saveToStorage(STORAGE_KEYS.PRODUCTS, newProducts);
+    let products = getFromStorage(STORAGE_KEYS.PRODUCTS) || [];
+    products = products.filter(p => p.id !== id);
+    saveToStorage(STORAGE_KEYS.PRODUCTS, products);
     return true;
   } catch (error) {
     console.error('Error deleting product:', error);
-    return false;
+    throw error;
   }
 }
 
-export function getAllProducts() {
-  return getFromStorage(STORAGE_KEYS.PRODUCTS) || [];
-}
-
-export function getProductById(id) {
-  const products = getFromStorage(STORAGE_KEYS.PRODUCTS) || [];
-  return products.find(p => p.id === id);
+export function getProducts(type = null) {
+  try {
+    const products = getFromStorage(STORAGE_KEYS.PRODUCTS) || [];
+    return type ? products.filter(p => p.type === type) : products;
+  } catch (error) {
+    console.error('Error getting products:', error);
+    return [];
+  }
 }

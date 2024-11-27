@@ -19,6 +19,7 @@
     "compressorjs": "^1.2.1",
     "@uploadcare/upload-client": "^6.12.0",
     "lodash": "^4.17.21",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "localforage": "^1.10.0"
   }
 }
