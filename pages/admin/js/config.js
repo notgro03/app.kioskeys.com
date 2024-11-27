@@ -1,4 +1,4 @@
-export const UPLOADCARE_PUBLIC_KEY = '1985ca48f4d597426e30';
+export const UPLOADCARE_PUBLIC_KEY = '1985ca48f4aac844b38cc5d9222a7d';
 
 export const PRODUCT_CATEGORIES = [
   { id: 'llaves', name: 'Llaves' },
