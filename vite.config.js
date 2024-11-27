@@ -30,10 +30,10 @@ export default defineConfig({
       '@': resolve(__dirname, 'src')
     }
   },
-  plugins: [{
-    name: 'rewrite-middleware',
-    configureServer(server) {
-      server.middlewares.use((req, res, next) => {
+  server: {
+    open: true,
+    middleware: [
+      (req, res, next) => {
         // Remover .html de las URLs
         if (req.url.endsWith('.html')) {
           req.url = req.url.slice(0, -5)
@@ -44,7 +44,7 @@ export default defineConfig({
           req.url = '/pages/admin/kioskeys-admin-x7k9y2'
         }
         next()
-      })
-    }
-  }]
+      }
+    ]
+  }
 })
