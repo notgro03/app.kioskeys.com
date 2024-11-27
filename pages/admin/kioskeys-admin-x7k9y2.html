@@ -54,6 +54,14 @@
       background: var(--primary-blue);
       color: white;
     }
+    .success-message {
+      display: none;
+      padding: 12px;
+      background: #d4edda;
+      color: #155724;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
   </style>
 </head>
 <body>
@@ -76,6 +84,8 @@
     </section>
 
     <div class="admin-container">
+      <div id="successMessage" class="success-message"></div>
+
       <div class="admin-section">
         <h2>Logo del Sitio</h2>
         <div class="form-group">
@@ -112,32 +122,37 @@
   </main>
 
   <script type="module">
-    import { UPLOADCARE_CONFIG } from './js/config.js';
-    import { initializeUploader, saveLogo, loadLogo } from './js/upload.js';
-    import { showSuccess } from './js/ui.js';
+    import { LogoManager } from '/js/logoManager.js';
+    import { ThemeManager } from '/js/themeManager.js';
 
     // Initialize Uploadcare
-    window.UPLOADCARE_PUBLIC_KEY = UPLOADCARE_CONFIG.publicKey;
+    window.UPLOADCARE_PUBLIC_KEY = '1985ca48f4d597426e30';
+
+    function showSuccess(message) {
+      const successMsg = document.getElementById('successMessage');
+      successMsg.textContent = message;
+      successMsg.style.display = 'block';
+      setTimeout(() => successMsg.style.display = 'none', 3000);
+    }
 
     // Initialize logo uploader
     document.addEventListener('DOMContentLoaded', () => {
-      // Load saved logo
-      const savedLogo = loadLogo();
-      if (savedLogo) {
-        document.querySelectorAll('[data-logo]').forEach(img => {
-          img.src = savedLogo;
-        });
-      }
+      // Initialize managers
+      LogoManager.init();
+      ThemeManager.init();
 
-      // Initialize logo uploader
-      initializeUploader('#logoUploader', {
-        crop: '1:1',
-        onSuccess: (fileInfo) => {
-          saveLogo(fileInfo.cdnUrl);
-        }
+      // Setup logo uploader
+      const widget = uploadcare.Widget('#logoUploader');
+      widget.onUploadComplete((fileInfo) => {
+        LogoManager.setLogo(fileInfo.cdnUrl);
+        showSuccess('Logo actualizado correctamente');
       });
 
-      // Initialize color pickers
+      // Setup color pickers
+      const theme = ThemeManager.getTheme();
+      document.getElementById('primaryColor').value = theme.primaryColor;
+      document.getElementById('secondaryColor').value = theme.secondaryColor;
+
       function updateColorPreviews() {
         document.getElementById('primaryPreview').style.backgroundColor = document.getElementById('primaryColor').value;
         document.getElementById('secondaryPreview').style.backgroundColor = document.getElementById('secondaryColor').value;
@@ -155,10 +170,7 @@
         secondaryColor: document.getElementById('secondaryColor').value
       };
 
-      localStorage.setItem('kioskeys_theme', JSON.stringify(theme));
-      document.documentElement.style.setProperty('--primary-blue', theme.primaryColor);
-      document.documentElement.style.setProperty('--secondary-blue', theme.secondaryColor);
-      
+      ThemeManager.setTheme(theme);
       showSuccess('Colores actualizados correctamente');
     };
   </script>
