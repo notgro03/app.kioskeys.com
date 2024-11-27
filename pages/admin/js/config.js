@@ -7,7 +7,8 @@ export const STORAGE_KEYS = {
   SETTINGS: 'kioskeys_settings',
   THEME: 'kioskeys_theme',
   LOGO: 'kioskeys_logo',
-  BRANDS: 'kioskeys_brands'
+  BRANDS: 'kioskeys_brands',
+  PLANS: 'kioskeys_plans'
 };
 
 export const DEFAULT_LOGO = 'https://ucarecdn.com/bdf174c8-8731-47fa-a3f9-2443689099be/logokioskey.png';
