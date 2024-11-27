@@ -1,5 +1,5 @@
 import { STORAGE_KEYS } from './config.js';
-import { saveToStorage, getFromStorage, generateId, validateProduct } from './utils.js';
+import { saveToStorage, getFromStorage, generateId, validateProduct } from '../utils.js';
 
 export const ProductAPI = {
   // Obtener todos los productos
