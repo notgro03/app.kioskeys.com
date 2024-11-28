@@ -1,5 +1,3 @@
-import { STORAGE_KEYS } from './config.js';
-
 export function saveToStorage(key, data) {
   try {
     localStorage.setItem(key, JSON.stringify(data));
@@ -26,6 +24,16 @@ export function removeFromStorage(key) {
     return true;
   } catch (error) {
     console.error(`Error removing from storage: ${error}`);
+    return false;
+  }
+}
+
+export function clearStorage() {
+  try {
+    localStorage.clear();
+    return true;
+  } catch (error) {
+    console.error(`Error clearing storage: ${error}`);
     return false;
   }
 }

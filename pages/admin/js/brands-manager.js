@@ -1,5 +1,5 @@
 import { STORAGE_KEYS } from './config.js';
-import { stateManager } from './state.js';
+import { saveToStorage, getFromStorage } from './storage.js';
 import { showSuccess, showError } from './ui.js';
 
 class BrandsManager {
@@ -8,12 +8,11 @@ class BrandsManager {
   }
 
   loadBrands() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.BRANDS)) || {};
+    return getFromStorage(STORAGE_KEYS.BRANDS) || {};
   }
 
   saveBrands() {
-    localStorage.setItem(STORAGE_KEYS.BRANDS, JSON.stringify(this.brands));
-    stateManager.updateState('brands', this.brands);
+    return saveToStorage(STORAGE_KEYS.BRANDS, this.brands);
   }
 
   addBrand(brandData) {
@@ -24,6 +23,10 @@ class BrandsManager {
         throw new Error('Nombre y logo son requeridos');
       }
 
+      if (this.brands[name]) {
+        throw new Error('La marca ya existe');
+      }
+
       this.brands[name] = {
         logo,
         type,
@@ -31,11 +34,14 @@ class BrandsManager {
         createdAt: new Date().toISOString()
       };
 
-      this.saveBrands();
+      if (!this.saveBrands()) {
+        throw new Error('Error al guardar la marca');
+      }
+
       showSuccess('Marca agregada correctamente');
       return true;
     } catch (error) {
-      showError('Error al agregar la marca');
+      showError(error.message || 'Error al agregar la marca');
       console.error('Error adding brand:', error);
       return false;
     }
@@ -53,29 +59,15 @@ class BrandsManager {
         updatedAt: new Date().toISOString()
       };
 
-      this.saveBrands();
+      if (!this.saveBrands()) {
+        throw new Error('Error al guardar los cambios');
+      }
+
       showSuccess('Marca actualizada correctamente');
       return true;
     } catch (error) {
-      showError('Error al actualizar la marca');
+      showError(error.message || 'Error al actualizar la marca');
       console.error('Error updating brand:', error);
-      return false;
-    }
-  }
-
-  deleteBrand(name) {
-    try {
-      if (!this.brands[name]) {
-        throw new Error('Marca no encontrada');
-      }
-
-      delete this.brands[name];
-      this.saveBrands();
-      showSuccess('Marca eliminada correctamente');
-      return true;
-    } catch (error) {
-      showError('Error al eliminar la marca');
-      console.error('Error deleting brand:', error);
       return false;
     }
   }
@@ -88,12 +80,20 @@ class BrandsManager {
         throw new Error('Marca no encontrada');
       }
 
+      if (!name || !years?.length) {
+        throw new Error('Nombre y años son requeridos');
+      }
+
       this.brands[brandName].models[name] = years;
-      this.saveBrands();
+
+      if (!this.saveBrands()) {
+        throw new Error('Error al guardar el modelo');
+      }
+
       showSuccess('Modelo agregado correctamente');
       return true;
     } catch (error) {
-      showError('Error al agregar el modelo');
+      showError(error.message || 'Error al agregar el modelo');
       console.error('Error adding model:', error);
       return false;
     }
@@ -109,6 +109,27 @@ class BrandsManager {
 
   getModels(brandName) {
     return this.brands[brandName]?.models || {};
+  }
+
+  deleteBrand(name) {
+    try {
+      if (!this.brands[name]) {
+        throw new Error('Marca no encontrada');
+      }
+
+      delete this.brands[name];
+
+      if (!this.saveBrands()) {
+        throw new Error('Error al eliminar la marca');
+      }
+
+      showSuccess('Marca eliminada correctamente');
+      return true;
+    } catch (error) {
+      showError(error.message || 'Error al eliminar la marca');
+      console.error('Error deleting brand:', error);
+      return false;
+    }
   }
 }
 
