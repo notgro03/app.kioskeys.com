@@ -7,141 +7,56 @@
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    .plan-features {
-      list-style: none;
-      margin: 20px 0;
+    .plans-container {
+      max-width: var(--max-content-width);
+      margin: 0 auto;
+      padding: 0 var(--content-padding);
+    }
+
+    .plan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin: 32px 0;
+    }
+
+    .plan-card {
+      background: white;
+      border-radius: 24px;
       padding: 0;
-    }
-
-    .plan-features li {
-      margin: 12px 0;
-      padding-left: 24px;
-      position: relative;
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 15px;
-    }
-
-    .plan-features li::before {
-      content: "✓";
-      position: absolute;
-      left: 0;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .button {
-      display: inline-block;
-      padding: 14px 28px;
-      border-radius: 30px;
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      text-align: center;
-      width: 100%;
-      margin-top: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(5px);
+      color: var(--text-color);
       position: relative;
       overflow: hidden;
-    }
-
-    .button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.2),
-        transparent
-      );
-      transition: 0.5s;
-    }
-
-    .button:hover::before {
-      left: 100%;
-    }
-
-    .button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .price {
-      font-size: 36px;
-      font-weight: 700;
-      margin: 16px 0;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-
-    .price span {
-      font-size: 16px;
-      opacity: 0.8;
-    }
-
-    .price small {
-      font-size: 14px;
-      opacity: 0.7;
-      font-weight: normal;
-    }
-
-    .feature-card {
+      transition: all 0.3s ease;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      min-height: 500px;
+      box-shadow: 0 8px 32px rgba(0, 59, 142, 0.1);
+      border: 1px solid rgba(0, 59, 142, 0.1);
+    }
+
+    .plan-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 59, 142, 0.15);
+    }
+
+    .plan-header {
+      background: var(--card-gradient);
+      color: white;
+      padding: 32px;
+      text-align: center;
       position: relative;
       overflow: hidden;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 32px;
-      transition: all 0.3s ease;
     }
 
-    .feature-card::before {
+    .plan-header::after {
       content: '';
       position: absolute;
-      top: 0;
+      bottom: -10px;
       left: 0;
       right: 0;
-      bottom: 0;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      background: radial-gradient(circle at top right, rgba(255,255,255,0.1) 0%, transparent 60%);
-    }
-
-    .feature-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 40px rgba(0, 59, 111, 0.2);
-    }
-
-    .feature-card:hover::before {
-      opacity: 1;
-    }
-
-    .plan-personal {
-      background: linear-gradient(135deg, #2193b0, #6dd5ed);
-    }
-
-    .plan-premium {
-      background: linear-gradient(135deg, #003B8E, #0072BC);
-      transform: scale(1.05);
-    }
-
-    .plan-empresa {
-      background: linear-gradient(135deg, #373B44, #4286f4);
-    }
-
-    .plan-personalizado {
-      background: linear-gradient(135deg, #4B79A1, #283E51);
+      height: 20px;
+      background: white;
+      border-radius: 50% 50% 0 0;
     }
 
     .popular-badge {
@@ -158,11 +73,10 @@
       z-index: 1;
     }
 
-    .feature-icon {
+    .plan-icon {
       font-size: 32px;
       margin-bottom: 16px;
-      color: rgba(255, 255, 255, 0.9);
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.2);
       width: 64px;
       height: 64px;
       display: flex;
@@ -172,135 +86,180 @@
       margin: 0 auto 20px;
     }
 
-    h3 {
-      color: white;
-      font-size: 24px;
-      margin: 16px 0;
-      font-weight: 600;
-      text-align: center;
-    }
-
-    .plan-description {
-      color: rgba(255, 255, 255, 0.8);
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 15px;
-    }
-
-    @media (max-width: 768px) {
-      .feature-card {
-        transform: scale(1) !important;
-        min-height: auto;
-      }
-    }
-
-    .payment-methods {
-      background: white;
-      border-radius: 18px;
-      padding: 32px;
-      margin: 32px 0;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0, 59, 142, 0.15);
-    }
-
-    .payment-methods h2 {
-      color: var(--primary-blue);
-      font-size: 24px;
-      margin-bottom: 24px;
-    }
-
-    .payment-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
-      margin: 32px 0;
-    }
-
-    .payment-option {
-      padding: 24px;
-      border-radius: 12px;
-      background: #f8f9fa;
-      text-align: center;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .payment-option:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0, 59, 142, 0.1);
-    }
-
-    .payment-icon {
-      font-size: 32px;
-      margin-bottom: 16px;
-      color: var(--primary-blue);
-      background: rgba(0, 59, 142, 0.1);
-      width: 64px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      margin: 0 auto 20px;
-    }
-
-    .payment-name {
-      font-weight: 600;
+    .plan-title {
+      font-size: 28px;
+      font-weight: 700;
       margin-bottom: 8px;
+    }
+
+    .plan-subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .plan-price {
+      text-align: center;
+      padding: 24px;
+      background: #f8f9fa;
+      border-bottom: 1px solid rgba(0, 59, 142, 0.1);
+    }
+
+    .plan-price-amount {
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--primary-blue);
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .plan-price-period {
+      font-size: 16px;
+      opacity: 0.7;
+      font-weight: normal;
+    }
+
+    .plan-content {
+      padding: 32px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .plan-features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex-grow: 1;
+    }
+
+    .plan-features li {
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(0, 59, 142, 0.1);
+    }
+
+    .plan-features li:last-child {
+      border-bottom: none;
+    }
+
+    .feature-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .feature-name {
+      font-weight: 500;
       color: var(--text-color);
     }
 
-    .payment-description {
+    .feature-value {
+      font-weight: 600;
+      padding: 4px 12px;
+      background: var(--card-gradient);
+      color: white;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .feature-description {
       font-size: 14px;
       color: #666;
+      margin-top: 4px;
+    }
+
+    .plan-button {
+      display: inline-block;
+      width: 100%;
+      padding: 16px 32px;
+      background: var(--card-gradient);
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-top: 24px;
+      border: none;
+    }
+
+    .plan-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 59, 142, 0.2);
+    }
+
+    .plan-button i {
+      margin-right: 8px;
+    }
+
+    .plan-info {
+      background: white;
+      border-radius: 24px;
+      padding: 48px;
+      margin: 48px 0;
+      box-shadow: 0 8px 32px rgba(0, 59, 142, 0.1);
+      text-align: center;
+    }
+
+    .plan-info h2 {
+      color: var(--primary-blue);
+      margin-bottom: 32px;
+      font-size: 28px;
+    }
+
+    .payment-methods {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+    }
+
+    .payment-method {
+      padding: 24px;
+      background: #f8f9fa;
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .payment-method:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 59, 142, 0.1);
+    }
+
+    .payment-method i {
+      font-size: 32px;
+      color: var(--primary-blue);
       margin-bottom: 16px;
     }
 
-    .features-comparison {
-      margin-top: 48px;
-      background: white;
-      border-radius: 18px;
-      padding: 32px;
-      box-shadow: 0 8px 32px rgba(0, 59, 142, 0.15);
-    }
-
-    .features-comparison h2 {
-      text-align: center;
+    .payment-method h3 {
+      margin-bottom: 8px;
       color: var(--primary-blue);
-      margin-bottom: 32px;
     }
 
-    .comparison-table {
-      width: 100%;
-      border-collapse: collapse;
+    .payment-method p {
+      color: #666;
+      font-size: 14px;
     }
 
-    .comparison-table th,
-    .comparison-table td {
-      padding: 16px;
-      text-align: center;
-      border-bottom: 1px solid #eee;
-    }
+    @media (max-width: 768px) {
+      .plan-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .plans-container {
+        padding: 0 16px;
+      }
 
-    .comparison-table th {
-      background: var(--primary-blue);
-      color: white;
-    }
-
-    .comparison-table tr:nth-child(even) {
-      background: #f8f9fa;
-    }
-
-    .check-icon {
-      color: #28a745;
-    }
-
-    .times-icon {
-      color: #dc3545;
+      .plan-info {
+        padding: 32px 24px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Navigation remains the same -->
   <nav>
     <div class="logo">
       <a href="/"><img src="/logo.svg" alt="Kioskeys"></a>
@@ -308,7 +267,7 @@
     <div class="nav-links">
       <a href="/">Inicio</a>
       <a href="/pages/red-servicios.html">Red de Servicios</a>
-      <a href="/pages/planes.html">Planes</a>
+      <a href="/pages/planes.html" class="active">Planes</a>
       <a href="/pages/productos.html">Productos</a>
       <a href="/pages/contacto.html">Contacto</a>
     </div>
@@ -326,183 +285,277 @@
     </section>
 
     <section class="main-content">
-      <div class="content-container">
-        <div class="features-grid">
-          <div class="feature-card plan-personal">
-            <div>
-              <i class="fas fa-user feature-icon"></i>
-              <h3>Plan Personal</h3>
-              <div class="price">
-                $2.500<span>/mes</span>
-                <small>+ IVA</small>
-              </div>
-              <p class="plan-description">Ideal para uso personal y familiar</p>
-              <ul class="plan-features">
-                <li>2 copias virtuales</li>
-                <li>Almacenamiento seguro</li>
-                <li>Soporte básico</li>
-                <li>App móvil</li>
-                <li>Respaldo en la nube</li>
-              </ul>
+      <div class="plans-container">
+        <div class="plan-grid">
+          <!-- Plan Básico -->
+          <div class="plan-card">
+            <div class="plan-header">
+              <i class="fas fa-user plan-icon"></i>
+              <h3 class="plan-title">Plan Básico</h3>
+              <p class="plan-subtitle">Ideal para cuando tenés una sola llave</p>
             </div>
-            <a href="/registro" class="button">Comenzar Ahora</a>
+            <div class="plan-price">
+              <div class="plan-price-amount">
+                $1.000<span class="plan-price-period">/mes</span>
+              </div>
+            </div>
+            <div class="plan-content">
+              <ul class="plan-features">
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Guarda Virtual Llave</span>
+                    <span class="feature-value">GRATIS</span>
+                  </div>
+                  <span class="feature-description">Solo se puede guardar 1 llave por usuario</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Guarda del Transponder</span>
+                    <span class="feature-value">PAGO</span>
+                  </div>
+                  <span class="feature-description">Siempre que el vehículo permita la guarda del chip</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Derivación a Cerrajería</span>
+                    <span class="feature-value">GRATIS</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Descuento en Carcasas</span>
+                    <span class="feature-value">HASTA 20%</span>
+                  </div>
+                  <span class="feature-description">En nuestra red</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Descuento en Llaves</span>
+                    <span class="feature-value">HASTA 20%</span>
+                  </div>
+                  <span class="feature-description">En nuestra red</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Llave de Emergencia</span>
+                    <span class="feature-value">1 GRATIS</span>
+                  </div>
+                  <span class="feature-description">Por año (no incluye programación)</span>
+                </li>
+              </ul>
+              <a href="https://mpago.la/1ETsqk9" target="_blank" class="plan-button">
+                <i class="fas fa-shopping-cart"></i> Contratar Plan
+              </a>
+            </div>
           </div>
 
-          <div class="feature-card plan-premium">
+          <!-- Plan Familiar -->
+          <div class="plan-card">
+            <div class="plan-header">
+              <i class="fas fa-users plan-icon"></i>
+              <h3 class="plan-title">Plan Familiar</h3>
+              <p class="plan-subtitle">Hasta 3 vehículos</p>
+            </div>
+            <div class="plan-price">
+              <div class="plan-price-amount">
+                $3.000<span class="plan-price-period">/mes</span>
+              </div>
+            </div>
+            <div class="plan-content">
+              <ul class="plan-features">
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Guarda Virtual Llave</span>
+                    <span class="feature-value">HASTA 3</span>
+                  </div>
+                  <span class="feature-description">Hasta 3 vehículos diferentes</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Guarda del Transponder</span>
+                    <span class="feature-value">PAGO</span>
+                  </div>
+                  <span class="feature-description">Precio preferencial</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Derivación a Cerrajería</span>
+                    <span class="feature-value">GRATIS</span>
+                  </div>
+                  <span class="feature-description">Prioridad en atención</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Descuentos en Servicios</span>
+                    <span class="feature-value">HASTA 20%</span>
+                  </div>
+                  <span class="feature-description">En toda la red</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Llaves Adicionales</span>
+                    <span class="feature-value">HASTA 5</span>
+                  </div>
+                  <span class="feature-description">$600 por llave adicional</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Programación</span>
+                    <span class="feature-value">HASTA 40%</span>
+                  </div>
+                  <span class="feature-description">Descuento en programación</span>
+                </li>
+              </ul>
+              <a href="https://mpago.la/1QPEA1K" target="_blank" class="plan-button">
+                <i class="fas fa-users"></i> Elegir Plan Familiar
+              </a>
+            </div>
+          </div>
+
+          <!-- Plan Premium -->
+          <div class="plan-card">
             <div class="popular-badge">MÁS POPULAR</div>
-            <div>
-              <i class="fas fa-crown feature-icon"></i>
-              <h3>Plan Premium</h3>
-              <div class="price">
-                $4.500<span>/mes</span>
-                <small>+ IVA</small>
-              </div>
-              <p class="plan-description">Para usuarios que necesitan más funcionalidades</p>
-              <ul class="plan-features">
-                <li>5 copias virtuales</li>
-                <li>Almacenamiento seguro</li>
-                <li>Soporte prioritario 24/7</li>
-                <li>30% descuento en duplicados</li>
-                <li>Respaldo en la nube</li>
-                <li>Compartir accesos</li>
-                <li>Historial detallado</li>
-              </ul>
+            <div class="plan-header">
+              <i class="fas fa-crown plan-icon"></i>
+              <h3 class="plan-title">Plan Premium</h3>
+              <p class="plan-subtitle">Máximos beneficios y cobertura total</p>
             </div>
-            <a href="/registro" class="button">Elegir Premium</a>
+            <div class="plan-price">
+              <div class="plan-price-amount">
+                $10.000<span class="plan-price-period">/mes</span>
+              </div>
+            </div>
+            <div class="plan-content">
+              <ul class="plan-features">
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Guarda Virtual Llave</span>
+                    <span class="feature-value">ILIMITADO</span>
+                  </div>
+                  <span class="feature-description">Sin límite de llaves</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Guarda del Transponder</span>
+                    <span class="feature-value">GRATIS</span>
+                  </div>
+                  <span class="feature-description">Para todos los vehículos</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Derivación Prioritaria</span>
+                    <span class="feature-value">24/7</span>
+                  </div>
+                  <span class="feature-description">Atención preferencial</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Descuentos Premium</span>
+                    <span class="feature-value">HASTA 30%</span>
+                  </div>
+                  <span class="feature-description">En todos los servicios</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Llaves de Emergencia</span>
+                    <span class="feature-value">GRATIS</span>
+                  </div>
+                  <span class="feature-description">Incluye programación</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Soporte VIP</span>
+                    <span class="feature-value">24/7</span>
+                  </div>
+                  <span class="feature-description">Línea directa premium</span>
+                </li>
+              </ul>
+              <a href="https://mpago.la/2pD5PjF" target="_blank" class="plan-button">
+                <i class="fas fa-crown"></i> Elegir Premium
+              </a>
+            </div>
           </div>
 
-          <div class="feature-card plan-empresa">
-            <div>
-              <i class="fas fa-building feature-icon"></i>
-              <h3>Plan Empresa</h3>
-              <div class="price">
-                $9.900<span>/mes</span>
-                <small>+ IVA</small>
+          <!-- Plan Flotas -->
+          <div class="plan-card">
+            <div class="plan-header">
+              <i class="fas fa-building plan-icon"></i>
+              <h3 class="plan-title">Plan Flotas</h3>
+              <p class="plan-subtitle">Solución integral para empresas</p>
+            </div>
+            <div class="plan-price">
+              <div class="plan-price-amount" style="font-size: 24px;">
+                Precio Personalizado
               </div>
-              <p class="plan-description">Solución completa para empresas</p>
-              <ul class="plan-features">
-                <li>Copias ilimitadas</li>
-                <li>Soporte técnico dedicado</li>
-                <li>Panel de administración</li>
-                <li>API de integración</li>
-                <li>Usuarios ilimitados</li>
-                <li>Reportes avanzados</li>
-                <li>Personalización de marca</li>
-              </ul>
             </div>
-            <a href="/contacto" class="button">Contactar Ventas</a>
-          </div>
-
-          <div class="feature-card plan-personalizado">
-            <div>
-              <i class="fas fa-handshake feature-icon"></i>
-              <h3>Plan Personalizado</h3>
-              <div class="price">Consultar</div>
-              <p class="plan-description">Adaptado a tus necesidades específicas</p>
+            <div class="plan-content">
               <ul class="plan-features">
-                <li>Soluciones a medida</li>
-                <li>Integración personalizada</li>
-                <li>Soporte dedicado VIP</li>
-                <li>Características personalizadas</li>
-                <li>SLA garantizado</li>
-                <li>Implementación asistida</li>
-                <li>Capacitación del personal</li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Guarda Virtual Llaves</span>
+                    <span class="feature-value">ILIMITADO</span>
+                  </div>
+                  <span class="feature-description">Sin límite de vehículos</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Panel de Administración</span>
+                    <span class="feature-value">INCLUIDO</span>
+                  </div>
+                  <span class="feature-description">Gestión centralizada</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Usuarios</span>
+                    <span class="feature-value">ILIMITADOS</span>
+                  </div>
+                  <span class="feature-description">Sin costo adicional</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">API de Integración</span>
+                    <span class="feature-value">INCLUIDA</span>
+                  </div>
+                  <span class="feature-description">Para sistemas propios</span>
+                </li>
+                <li>
+                  <div class="feature-header">
+                    <span class="feature-name">Soporte Dedicado</span>
+                    <span class="feature-value">24/7</span>
+                  </div>
+                  <span class="feature-description">Ejecutivo de cuenta</span>
+                </li>
               </ul>
+              <a href="https://wa.me/541157237390" class="plan-button">
+                <i class="fas fa-building"></i> Solicitar Propuesta
+              </a>
             </div>
-            <a href="/contacto" class="button">Solicitar Propuesta</a>
           </div>
         </div>
 
-        <div class="payment-methods" id="pagos">
-          <h2>Métodos de Pago Disponibles</h2>
-          <div class="payment-grid">
-            <div class="payment-option">
-              <i class="fas fa-credit-card payment-icon"></i>
-              <div class="payment-name">Tarjetas</div>
-              <div class="payment-description">Aceptamos todas las tarjetas de crédito y débito</div>
+        <div class="plan-info">
+          <h2>Medios de Pago</h2>
+          <div class="payment-methods">
+            <div class="payment-method">
+              <i class="fas fa-credit-card"></i>
+              <h3>Tarjetas</h3>
+              <p>Crédito y débito</p>
             </div>
-
-            <div class="payment-option">
-              <i class="fab fa-paypal payment-icon"></i>
-              <div class="payment-name">PayPal</div>
-              <div class="payment-description">Pago seguro a través de PayPal</div>
+            <div class="payment-method">
+              <i class="fas fa-money-bill-wave"></i>
+              <h3>Efectivo</h3>
+              <p>En puntos de pago</p>
             </div>
-
-            <div class="payment-option">
-              <i class="fas fa-handshake payment-icon"></i>
-              <div class="payment-name">Mercado Pago</div>
-              <div class="payment-description">Pago fácil con Mercado Pago</div>
+            <div class="payment-method">
+              <i class="fas fa-university"></i>
+              <h3>Transferencia</h3>
+              <p>Bancaria</p>
             </div>
-
-            <div class="payment-option">
-              <i class="fas fa-university payment-icon"></i>
-              <div class="payment-name">Transferencia</div>
-              <div class="payment-description">Transferencia bancaria directa</div>
+            <div class="payment-method">
+              <i class="fas fa-mobile-alt"></i>
+              <h3>Billeteras</h3>
+              <p>Digitales</p>
             </div>
-          </div>
-          
-          <p style="color: #666; margin-top: 16px;">
-            Todos los pagos son procesados de forma segura y encriptada
-          </p>
-        </div>
-
-        <div class="features-comparison">
-          <h2>Comparación de Características</h2>
-          <div style="overflow-x: auto;">
-            <table class="comparison-table">
-              <thead>
-                <tr>
-                  <th>Característica</th>
-                  <th>Personal</th>
-                  <th>Premium</th>
-                  <th>Empresa</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Copias Virtuales</td>
-                  <td>2</td>
-                  <td>5</td>
-                  <td>Ilimitadas</td>
-                </tr>
-                <tr>
-                  <td>Soporte 24/7</td>
-                  <td><i class="fas fa-times times-icon"></i></td>
-                  <td><i class="fas fa-check check-icon"></i></td>
-                  <td><i class="fas fa-check check-icon"></i></td>
-                </tr>
-                <tr>
-                  <td>App Móvil</td>
-                  <td><i class="fas fa-check check-icon"></i></td>
-                  <td><i class="fas fa-check check-icon"></i></td>
-                  <td><i class="fas fa-check check-icon"></i></td>
-                </tr>
-                <tr>
-                  <td>Descuentos en Duplicados</td>
-                  <td>10%</td>
-                  <td>30%</td>
-                  <td>40%</td>
-                </tr>
-                <tr>
-                  <td>Panel de Administración</td>
-                  <td><i class="fas fa-times times-icon"></i></td>
-                  <td><i class="fas fa-times times-icon"></i></td>
-                  <td><i class="fas fa-check check-icon"></i></td>
-                </tr>
-                <tr>
-                  <td>API de Integración</td>
-                  <td><i class="fas fa-times times-icon"></i></td>
-                  <td><i class="fas fa-times times-icon"></i></td>
-                  <td><i class="fas fa-check check-icon"></i></td>
-                </tr>
-                <tr>
-                  <td>Usuarios</td>
-                  <td>1</td>
-                  <td>3</td>
-                  <td>Ilimitados</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
