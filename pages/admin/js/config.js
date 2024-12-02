@@ -1,17 +1,11 @@
-// Configuration constants
-export const UPLOADCARE_PUBLIC_KEY = '1985ca48f4d597426e30';
-
+// Admin configuration constants
+export const API_BASE_URL = '/api';
 export const STORAGE_KEYS = {
-  PRODUCTS: 'kioskeys_products',
-  IMAGES: 'kioskeys_images',
-  SETTINGS: 'kioskeys_settings',
+  AUTH_TOKEN: 'kioskeys_auth_token',
+  USER_DATA: 'kioskeys_user_data',
   THEME: 'kioskeys_theme',
-  LOGO: 'kioskeys_logo',
-  BRANDS: 'kioskeys_brands',
-  PLANS: 'kioskeys_plans'
+  SETTINGS: 'kioskeys_settings'
 };
-
-export const DEFAULT_LOGO = 'https://ucarecdn.com/bdf174c8-8731-47fa-a3f9-2443689099be/logokioskey.png';
 
 export const DEFAULT_THEME = {
   primaryColor: '#003B8E',
@@ -20,12 +14,16 @@ export const DEFAULT_THEME = {
   backgroundColor: '#ffffff'
 };
 
-export const UPLOADCARE_CONFIG = {
-  publicKey: UPLOADCARE_PUBLIC_KEY,
-  tabs: 'file url',
-  previewStep: true,
-  clearable: true,
-  multiple: false,
-  imagesOnly: true,
-  crop: '16:9'
+export const ROLES = {
+  ADMIN: 'admin',
+  EDITOR: 'editor',
+  VIEWER: 'viewer'
+};
+
+export const PERMISSIONS = {
+  MANAGE_APPEARANCE: 'manage_appearance',
+  MANAGE_PRODUCTS: 'manage_products',
+  MANAGE_CONTENT: 'manage_content',
+  MANAGE_USERS: 'manage_users',
+  MANAGE_SETTINGS: 'manage_settings'
 };
