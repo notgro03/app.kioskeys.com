@@ -6,156 +6,237 @@
   <title>¿Cómo Funciona? - Kioskeys</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
   <style>
-    .step-card {
-      background: var(--card-gradient);
-      border-radius: 18px;
-      padding: 32px;
-      color: white;
-      margin-bottom: 24px;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    .how-it-works-section {
+      padding: 64px 0;
+      background: #f8f9fa;
+      position: relative;
+      overflow: hidden;
     }
 
-    .step-card.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .section-title {
+      text-align: center;
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .section-title h2 {
+      font-size: 36px;
+      color: var(--primary-blue);
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    .section-title p {
+      font-size: 18px;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .step-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      margin-bottom: 96px;
+      position: relative;
+    }
+
+    .step-container:nth-child(even) {
+      direction: rtl;
+    }
+
+    .step-container:nth-child(even) .step-content {
+      direction: ltr;
+    }
+
+    .step-image {
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 59, 142, 0.15);
+      position: relative;
+    }
+
+    .step-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .step-image:hover img {
+      transform: scale(1.05);
+    }
+
+    .step-content {
+      padding: 32px;
     }
 
     .step-number {
-      font-size: 48px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      color: rgba(255, 255, 255, 0.2);
-    }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      margin: 32px 0;
-    }
-
-    .benefit-card {
-      background: white;
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: 0 4px 6px rgba(0, 59, 142, 0.1);
-      border: 1px solid rgba(0, 59, 142, 0.1);
-    }
-
-    .benefit-icon {
-      font-size: 32px;
+      font-size: 64px;
+      font-weight: 800;
       color: var(--primary-blue);
-      margin-bottom: 16px;
-    }
-
-    .features-list {
-      list-style: none;
-      padding: 0;
-      margin: 16px 0;
-    }
-
-    .features-list li {
-      margin-bottom: 12px;
-      padding-left: 24px;
-      position: relative;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .features-list li::before {
-      content: "✓";
+      opacity: 0.1;
       position: absolute;
-      left: 0;
-      color: rgba(255, 255, 255, 0.9);
+      top: -40px;
+      left: -20px;
     }
 
-    .info-section {
-      background: white;
-      border-radius: 18px;
-      padding: 32px;
-      margin: 32px 0;
-      box-shadow: 0 4px 6px rgba(0, 59, 142, 0.1);
-    }
-
-    .info-section h2 {
+    .step-title {
+      font-size: 28px;
+      font-weight: 700;
       color: var(--primary-blue);
       margin-bottom: 16px;
-      font-size: 24px;
     }
 
-    .info-section p {
-      margin-bottom: 16px;
+    .step-description {
+      font-size: 16px;
       line-height: 1.6;
       color: #666;
-    }
-
-    .security-features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 24px;
-      margin: 32px 0;
-    }
-
-    .security-feature {
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .security-feature i {
-      font-size: 32px;
-      color: var(--primary-blue);
-      margin-bottom: 16px;
-    }
-
-    .security-feature h3 {
-      margin-bottom: 12px;
-      color: var(--primary-blue);
-    }
-
-    .emergency-access {
-      background: var(--card-gradient);
-      color: white;
-      padding: 32px;
-      border-radius: 18px;
-      margin: 32px 0;
-    }
-
-    .emergency-access h2 {
-      color: white;
       margin-bottom: 24px;
     }
 
-    .emergency-steps {
+    .step-features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .step-features li {
+      padding: 12px 0;
+      padding-left: 32px;
+      position: relative;
+      color: #444;
+    }
+
+    .step-features li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--primary-blue);
+      font-weight: 700;
+    }
+
+    .security-section {
+      background: white;
+      padding: 64px 0;
+    }
+
+    .security-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
-      margin-top: 24px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
     }
 
-    .emergency-step {
+    .security-card {
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
       text-align: center;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 59, 142, 0.1);
+      transition: all 0.3s ease;
     }
 
-    .emergency-step i {
+    .security-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(0, 59, 142, 0.15);
+    }
+
+    .security-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--card-gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      color: white;
       font-size: 32px;
+    }
+
+    .security-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--primary-blue);
       margin-bottom: 16px;
     }
 
-    .emergency-step h4 {
-      margin-bottom: 12px;
-      font-size: 18px;
+    .security-description {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.6;
     }
 
-    .emergency-step p {
-      font-size: 14px;
+    .cta-section {
+      background: var(--card-gradient);
+      padding: 64px 0;
+      color: white;
+      text-align: center;
+      margin-top: 64px;
+    }
+
+    .cta-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cta-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .cta-description {
+      font-size: 18px;
       opacity: 0.9;
+      margin-bottom: 32px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 16px 32px;
+      background: white;
+      color: var(--primary-blue);
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .step-container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .step-container:nth-child(even) {
+        direction: ltr;
+      }
+
+      .security-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title h2 {
+        font-size: 28px;
+      }
+
+      .step-title {
+        font-size: 24px;
+      }
+
+      .cta-title {
+        font-size: 28px;
+      }
     }
   </style>
 </head>
@@ -184,128 +265,124 @@
       </div>
     </section>
 
-    <section class="main-content">
+    <section class="how-it-works-section">
       <div class="content-container">
-        <div class="info-section">
-          <h2>Tu Llave Segura en la Nube</h2>
-          <p>Kioskeys es una aplicación revolucionaria que te permite guardar una copia digital de tu llave en la nube de manera segura. Con esta tecnología, nunca más te quedarás sin acceso a tu vehículo en caso de emergencia.</p>
-          
-          <div class="security-features">
-            <div class="security-feature">
+        <div class="section-title">
+          <h2>Un proceso simple y seguro</h2>
+          <p>Descubre cómo Kioskeys revoluciona la gestión de tus llaves con tecnología de punta</p>
+        </div>
+
+        <div class="step-container" data-aos="fade-up">
+          <div class="step-image">
+            <img src="https://images.unsplash.com/photo-1581093458791-9d42e3c2fd45" alt="Digitalización de llaves">
+          </div>
+          <div class="step-content">
+            <div class="step-number">01</div>
+            <h3 class="step-title">Digitaliza tu Llave</h3>
+            <p class="step-description">Registra tu llave en nuestro sistema seguro. Cada llave recibe un código único y es almacenada con la más alta seguridad.</p>
+            <ul class="step-features">
+              <li>Escaneo digital de alta precisión</li>
+              <li>Códigos únicos encriptados</li>
+              <li>Clasificación por vehículo</li>
+              <li>Fotos y descripción detallada</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step-container" data-aos="fade-up">
+          <div class="step-image">
+            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa" alt="Almacenamiento en la nube">
+          </div>
+          <div class="step-content">
+            <div class="step-number">02</div>
+            <h3 class="step-title">Almacenamiento Seguro</h3>
+            <p class="step-description">Tu llave se guarda de forma segura en la nube, permitiéndote acceder a ella desde cualquier lugar y en cualquier momento.</p>
+            <ul class="step-features">
+              <li>Acceso 24/7 desde cualquier dispositivo</li>
+              <li>Copias de seguridad automáticas</li>
+              <li>Historial de accesos</li>
+              <li>Notificaciones en tiempo real</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step-container" data-aos="fade-up">
+          <div class="step-image">
+            <img src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f" alt="Recuperación de emergencia">
+          </div>
+          <div class="step-content">
+            <div class="step-number">03</div>
+            <h3 class="step-title">Recuperación Inmediata</h3>
+            <p class="step-description">En caso de pérdida o emergencia, recupera tu llave en cualquier punto de nuestra red de cerrajerías autorizadas.</p>
+            <ul class="step-features">
+              <li>Red nacional de cerrajeros certificados</li>
+              <li>Verificación de identidad segura</li>
+              <li>Servicio disponible 24/7</li>
+              <li>Tiempo de respuesta: 30 minutos</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="security-section">
+      <div class="content-container">
+        <div class="section-title">
+          <h2>Seguridad de Primer Nivel</h2>
+          <p>Tu tranquilidad es nuestra prioridad</p>
+        </div>
+
+        <div class="security-grid">
+          <div class="security-card" data-aos="fade-up" data-aos-delay="0">
+            <div class="security-icon">
               <i class="fas fa-shield-alt"></i>
-              <h3>Encriptación Avanzada</h3>
-              <p>Tus datos están protegidos con encriptación de grado militar</p>
             </div>
-            
-            <div class="security-feature">
+            <h3 class="security-title">Encriptación Avanzada</h3>
+            <p class="security-description">Tus datos están protegidos con encriptación de grado militar y protocolos de seguridad de última generación.</p>
+          </div>
+
+          <div class="security-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="security-icon">
               <i class="fas fa-fingerprint"></i>
-              <h3>Acceso Biométrico</h3>
-              <p>Autenticación segura mediante huella digital o reconocimiento facial</p>
             </div>
-            
-            <div class="security-feature">
+            <h3 class="security-title">Autenticación Biométrica</h3>
+            <p class="security-description">Acceso seguro mediante huella digital o reconocimiento facial para máxima protección.</p>
+          </div>
+
+          <div class="security-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="security-icon">
               <i class="fas fa-database"></i>
-              <h3>Respaldo Seguro</h3>
-              <p>Copias de seguridad automáticas en servidores redundantes</p>
             </div>
+            <h3 class="security-title">Respaldo Redundante</h3>
+            <p class="security-description">Copias de seguridad automáticas en múltiples servidores para garantizar la disponibilidad.</p>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="step-card">
-          <div class="step-number">01</div>
-          <h3>Digitaliza tu Llave</h3>
-          <p>Registra tu llave en nuestro sistema seguro. Cada llave recibe un código único y es almacenada con la más alta seguridad.</p>
-          <ul class="features-list">
-            <li>Escaneo digital de alta precisión</li>
-            <li>Asignación de códigos únicos encriptados</li>
-            <li>Clasificación por vehículo</li>
-            <li>Fotos y descripción detallada</li>
-          </ul>
+    <section class="cta-section">
+      <div class="content-container">
+        <div class="cta-content">
+          <h2 class="cta-title">¿Listo para empezar?</h2>
+          <p class="cta-description">Únete a miles de usuarios que ya confían en Kioskeys para la gestión segura de sus llaves</p>
+          <a href="/pages/planes.html" class="cta-button">
+            <i class="fas fa-rocket"></i> Comenzar Ahora
+          </a>
         </div>
-
-        <div class="step-card">
-          <div class="step-number">02</div>
-          <h3>Almacenamiento en la Nube</h3>
-          <p>Tu llave se guarda de forma segura en la nube, permitiéndote acceder a ella desde cualquier lugar y en cualquier momento.</p>
-          <ul class="features-list">
-            <li>Acceso 24/7 desde cualquier dispositivo</li>
-            <li>Copias de seguridad automáticas</li>
-            <li>Historial de accesos y modificaciones</li>
-            <li>Notificaciones de seguridad en tiempo real</li>
-          </ul>
-        </div>
-
-        <div class="step-card">
-          <div class="step-number">03</div>
-          <h3>Recuperación de Emergencia</h3>
-          <p>En caso de pérdida o emergencia, recupera tu llave en cualquier punto de nuestra red de cerrajerías autorizadas.</p>
-          <ul class="features-list">
-            <li>Red nacional de cerrajeros certificados</li>
-            <li>Verificación de identidad segura</li>
-            <li>Servicio disponible 24/7</li>
-            <li>Tiempo de respuesta promedio: 30 minutos</li>
-          </ul>
-        </div>
-
-        <div class="emergency-access">
-          <h2>Acceso de Emergencia</h2>
-          <p>En caso de emergencia, recupera tu llave siguiendo estos simples pasos:</p>
-          
-          <div class="emergency-steps">
-            <div class="emergency-step">
-              <i class="fas fa-map-marker-alt"></i>
-              <h4>Localiza</h4>
-              <p>Encuentra el cerrajero autorizado más cercano en nuestra red de servicios</p>
-            </div>
-            
-            <div class="emergency-step">
-              <i class="fas fa-id-card"></i>
-              <h4>Verifica</h4>
-              <p>Presenta tu identificación y código único de llave</p>
-            </div>
-            
-            <div class="emergency-step">
-              <i class="fas fa-key"></i>
-              <h4>Recupera</h4>
-              <p>Obtén tu llave de emergencia en minutos</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="benefits-grid">
-          <div class="benefit-card">
-            <i class="fas fa-shield-alt benefit-icon"></i>
-            <h3>Máxima Seguridad</h3>
-            <p>Sistema de encriptación avanzada y autenticación de dos factores para proteger tus llaves digitales.</p>
-          </div>
-
-          <div class="benefit-card">
-            <i class="fas fa-clock benefit-icon"></i>
-            <h3>Siempre Disponible</h3>
-            <p>Accede a tus llaves digitales 24/7 y solicita servicios de emergencia en cualquier momento.</p>
-          </div>
-
-          <div class="benefit-card">
-            <i class="fas fa-network-wired benefit-icon"></i>
-            <h3>Red Nacional</h3>
-            <p>Amplia red de cerrajeros certificados en todo el país para atenderte donde lo necesites.</p>
-          </div>
-
-          <div class="benefit-card">
-            <i class="fas fa-hand-holding-usd benefit-icon"></i>
-            <h3>Ahorro Garantizado</h3>
-            <p>Evita costos elevados de cerrajería de emergencia con nuestro servicio preventivo.</p>
-          </div>
-        </div>
-
-        <a href="/pages/planes.html" class="tutorial-button">
-          <i class="fas fa-rocket"></i>
-          Comenzar Ahora
-        </a>
       </div>
     </section>
   </main>
 
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100
+      });
+    });
+  </script>
   <script src="/main.js"></script>
 </body>
 </html>
