@@ -6,45 +6,32 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: {
-        main: 'index.html',
-        'como-funciona': 'pages/como-funciona.html',
-        'red-servicios': 'pages/red-servicios.html',
-        'planes': 'pages/planes.html',
-        'productos': 'pages/productos.html',
-        'contacto': 'pages/contacto.html',
-        'tutoriales': 'pages/tutoriales.html',
-        'telemandos': 'pages/telemandos.html',
-        'blog': 'pages/blog.html',
-        'faq': 'pages/faq.html',
-        'privacidad': 'pages/privacidad.html',
-        'terminos': 'pages/terminos.html',
-        'llaves': 'pages/llaves.html',
-        'carcasas': 'pages/carcasas.html',
-        'accesorios': 'pages/accesorios.html',
-        'admin': 'pages/admin/kioskeys-admin-x7k9y2.html'
+        main: resolve(__dirname, 'index.html'),
+        'como-funciona': resolve(__dirname, 'pages/como-funciona.html'),
+        'red-servicios': resolve(__dirname, 'pages/red-servicios.html'),
+        'planes': resolve(__dirname, 'pages/planes.html'),
+        'productos': resolve(__dirname, 'pages/productos.html'),
+        'contacto': resolve(__dirname, 'pages/contacto.html'),
+        'tutoriales': resolve(__dirname, 'pages/tutoriales.html'),
+        'telemandos': resolve(__dirname, 'pages/telemandos.html'),
+        'blog': resolve(__dirname, 'pages/blog.html'),
+        'faq': resolve(__dirname, 'pages/faq.html'),
+        'privacidad': resolve(__dirname, 'pages/privacidad.html'),
+        'terminos': resolve(__dirname, 'pages/terminos.html'),
+        'llaves': resolve(__dirname, 'pages/llaves.html'),
+        'carcasas': resolve(__dirname, 'pages/carcasas.html'),
+        'accesorios': resolve(__dirname, 'pages/accesorios.html'),
+        'admin': resolve(__dirname, 'pages/admin/kioskeys-admin-x7k9y2.html')
       }
     }
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src')
+      '@': resolve(__dirname, 'src'),
+      '@admin': resolve(__dirname, 'src/admin')
     }
   },
   server: {
-    open: true,
-    middleware: [
-      (req, res, next) => {
-        // Remover .html de las URLs
-        if (req.url.endsWith('.html')) {
-          req.url = req.url.slice(0, -5)
-        }
-        
-        // Redirigir /admin a la página de administración
-        if (req.url === '/admin') {
-          req.url = '/pages/admin/kioskeys-admin-x7k9y2'
-        }
-        next()
-      }
-    ]
+    open: true
   }
 })
