@@ -57,11 +57,13 @@
       overflow: hidden;
       box-shadow: 0 20px 40px rgba(0, 59, 142, 0.15);
       position: relative;
+      aspect-ratio: 16/9;
     }
 
     .step-image img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
       display: block;
       transition: transform 0.5s ease;
     }
@@ -171,12 +173,56 @@
       line-height: 1.6;
     }
 
-    .cta-section {
+    .benefits-section {
       background: var(--card-gradient);
       padding: 64px 0;
       color: white;
-      text-align: center;
       margin-top: 64px;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .benefit-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 32px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .benefit-icon {
+      font-size: 32px;
+      margin-bottom: 24px;
+    }
+
+    .benefit-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .benefit-description {
+      font-size: 15px;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .cta-section {
+      background: white;
+      padding: 64px 0;
+      text-align: center;
     }
 
     .cta-content {
@@ -187,20 +233,21 @@
     .cta-title {
       font-size: 32px;
       font-weight: 700;
+      color: var(--primary-blue);
       margin-bottom: 16px;
     }
 
     .cta-description {
       font-size: 18px;
-      opacity: 0.9;
+      color: #666;
       margin-bottom: 32px;
     }
 
     .cta-button {
       display: inline-block;
       padding: 16px 32px;
-      background: white;
-      color: var(--primary-blue);
+      background: var(--card-gradient);
+      color: white;
       text-decoration: none;
       border-radius: 12px;
       font-weight: 600;
@@ -209,7 +256,7 @@
 
     .cta-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 24px rgba(0, 59, 142, 0.2);
     }
 
     @media (max-width: 768px) {
@@ -274,50 +321,50 @@
 
         <div class="step-container" data-aos="fade-up">
           <div class="step-image">
-            <img src="https://images.unsplash.com/photo-1581093458791-9d42e3c2fd45" alt="Digitalización de llaves">
+            <img src="https://images.unsplash.com/photo-1586717799252-bd134ad00e26" alt="Registro de llave">
           </div>
           <div class="step-content">
             <div class="step-number">01</div>
-            <h3 class="step-title">Digitaliza tu Llave</h3>
-            <p class="step-description">Registra tu llave en nuestro sistema seguro. Cada llave recibe un código único y es almacenada con la más alta seguridad.</p>
+            <h3 class="step-title">Registra tu Llave</h3>
+            <p class="step-description">Visita cualquier punto de nuestra red de servicios para digitalizar tu llave. Nuestros expertos realizarán un escaneo de alta precisión y crearán una copia digital segura.</p>
             <ul class="step-features">
-              <li>Escaneo digital de alta precisión</li>
-              <li>Códigos únicos encriptados</li>
-              <li>Clasificación por vehículo</li>
-              <li>Fotos y descripción detallada</li>
+              <li>Escaneo digital profesional</li>
+              <li>Verificación de compatibilidad</li>
+              <li>Registro de datos del vehículo</li>
+              <li>Asignación de código único</li>
             </ul>
           </div>
         </div>
 
         <div class="step-container" data-aos="fade-up">
           <div class="step-image">
-            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa" alt="Almacenamiento en la nube">
+            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa" alt="Almacenamiento seguro">
           </div>
           <div class="step-content">
             <div class="step-number">02</div>
             <h3 class="step-title">Almacenamiento Seguro</h3>
-            <p class="step-description">Tu llave se guarda de forma segura en la nube, permitiéndote acceder a ella desde cualquier lugar y en cualquier momento.</p>
+            <p class="step-description">Tu llave digital se guarda en nuestra nube con los más altos estándares de seguridad. Accede a ella desde cualquier dispositivo, en cualquier momento.</p>
             <ul class="step-features">
-              <li>Acceso 24/7 desde cualquier dispositivo</li>
+              <li>Encriptación de grado militar</li>
+              <li>Autenticación biométrica</li>
               <li>Copias de seguridad automáticas</li>
-              <li>Historial de accesos</li>
-              <li>Notificaciones en tiempo real</li>
+              <li>Historial de accesos detallado</li>
             </ul>
           </div>
         </div>
 
         <div class="step-container" data-aos="fade-up">
           <div class="step-image">
-            <img src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f" alt="Recuperación de emergencia">
+            <img src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f" alt="Recuperación inmediata">
           </div>
           <div class="step-content">
             <div class="step-number">03</div>
             <h3 class="step-title">Recuperación Inmediata</h3>
-            <p class="step-description">En caso de pérdida o emergencia, recupera tu llave en cualquier punto de nuestra red de cerrajerías autorizadas.</p>
+            <p class="step-description">En caso de pérdida o emergencia, acude a cualquier punto de nuestra red. Con tu identificación y código único, tendrás una nueva llave en minutos.</p>
             <ul class="step-features">
-              <li>Red nacional de cerrajeros certificados</li>
-              <li>Verificación de identidad segura</li>
+              <li>Red nacional de cerrajeros</li>
               <li>Servicio disponible 24/7</li>
+              <li>Verificación de identidad segura</li>
               <li>Tiempo de respuesta: 30 minutos</li>
             </ul>
           </div>
@@ -355,6 +402,41 @@
             </div>
             <h3 class="security-title">Respaldo Redundante</h3>
             <p class="security-description">Copias de seguridad automáticas en múltiples servidores para garantizar la disponibilidad.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits-section">
+      <div class="content-container">
+        <div class="section-title">
+          <h2>Beneficios Exclusivos</h2>
+          <p>Descubre todas las ventajas de usar Kioskeys</p>
+        </div>
+
+        <div class="benefits-grid">
+          <div class="benefit-card" data-aos="fade-up" data-aos-delay="0">
+            <i class="fas fa-clock benefit-icon"></i>
+            <h3 class="benefit-title">Ahorro de Tiempo</h3>
+            <p class="benefit-description">Obtén una nueva llave en minutos, sin necesidad de acudir al concesionario oficial.</p>
+          </div>
+
+          <div class="benefit-card" data-aos="fade-up" data-aos-delay="100">
+            <i class="fas fa-wallet benefit-icon"></i>
+            <h3 class="benefit-title">Ahorro de Dinero</h3>
+            <p class="benefit-description">Precios hasta un 70% más económicos que en concesionarios oficiales.</p>
+          </div>
+
+          <div class="benefit-card" data-aos="fade-up" data-aos-delay="200">
+            <i class="fas fa-map-marked-alt benefit-icon"></i>
+            <h3 class="benefit-title">Cobertura Nacional</h3>
+            <p class="benefit-description">Accede a tu llave desde cualquier punto de nuestra extensa red de servicios.</p>
+          </div>
+
+          <div class="benefit-card" data-aos="fade-up" data-aos-delay="300">
+            <i class="fas fa-headset benefit-icon"></i>
+            <h3 class="benefit-title">Soporte 24/7</h3>
+            <p class="benefit-description">Asistencia técnica disponible las 24 horas, los 365 días del año.</p>
           </div>
         </div>
       </div>
