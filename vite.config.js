@@ -27,8 +27,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-      '@admin': resolve(__dirname, 'src/admin')
+      '@': resolve(__dirname, './src'),
+      '@admin': resolve(__dirname, './src/admin')
     }
   },
   server: {
