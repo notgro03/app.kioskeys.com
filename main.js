@@ -3,48 +3,51 @@ let lastScrollY = window.scrollY;
 const nav = document.querySelector('nav');
 const hero = document.querySelector('.hero');
 
-window.addEventListener('scroll', () => {
-  // Hide/show nav on scroll
-  if (window.scrollY > lastScrollY) {
-    nav.classList.add('nav-hidden');
-  } else {
-    nav.classList.remove('nav-hidden');
-  }
-  lastScrollY = window.scrollY;
+// Only add scroll listener if nav exists
+if (nav) {
+  window.addEventListener('scroll', () => {
+    // Hide/show nav on scroll
+    if (window.scrollY > lastScrollY) {
+      nav.classList.add('nav-hidden');
+    } else {
+      nav.classList.remove('nav-hidden');
+    }
+    lastScrollY = window.scrollY;
 
-  // Parallax effect on hero
-  if (hero && window.scrollY > 50) {
-    hero.classList.add('scrolled');
-  } else if (hero) {
-    hero.classList.remove('scrolled');
-  }
-});
-
-// Mobile menu functionality
-const menuButton = document.querySelector('.menu-button');
-const navLinks = document.querySelector('.nav-links');
-
-if (menuButton && navLinks) {
-  menuButton.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    menuButton.classList.toggle('active');
-  });
-
-  // Close menu when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!nav.contains(e.target) && navLinks.classList.contains('active')) {
-      navLinks.classList.remove('active');
-      menuButton.classList.remove('active');
+    // Parallax effect on hero
+    if (hero && window.scrollY > 50) {
+      hero.classList.add('scrolled');
+    } else if (hero) {
+      hero.classList.remove('scrolled');
     }
   });
 
-  // Close menu when clicking a link
-  navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('active');
-      menuButton.classList.remove('active');
+  // Mobile menu functionality
+  const menuButton = document.querySelector('.menu-button');
+  const navLinks = document.querySelector('.nav-links');
+
+  if (menuButton && navLinks) {
+    menuButton.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      menuButton.classList.toggle('active');
     });
-  });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!nav.contains(e.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+        menuButton.classList.remove('active');
+      }
+    });
+
+    // Close menu when clicking a link
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        menuButton.classList.remove('active');
+      });
+    });
+  }
 }
 
 // Animation observer configuration
