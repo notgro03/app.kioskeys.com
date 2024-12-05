@@ -81,6 +81,7 @@ export class BrandsManager {
       }
       
       e.target.reset();
+      document.getElementById('logoPreview').src = '/placeholder-logo.png';
       this.loadBrands();
     } catch (error) {
       showError('Error al guardar la marca');
@@ -104,7 +105,8 @@ export class BrandsManager {
   }
 
   async deleteBrand(id) {
-    if (!confirm('¿Estás seguro de que deseas eliminar esta marca?')) return;
+    const result = await showConfirm('¿Estás seguro de que deseas eliminar esta marca?');
+    if (!result.isConfirmed) return;
 
     try {
       await brandsAPI.delete(id);
@@ -116,6 +118,3 @@ export class BrandsManager {
     }
   }
 }
-
-// Initialize brands manager
-window.brandsManager = new BrandsManager();

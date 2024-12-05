@@ -6,9 +6,7 @@ export function showSuccess(message) {
     title: '¡Éxito!',
     text: message,
     timer: 2000,
-    showConfirmButton: false,
-    position: 'top-end',
-    toast: true
+    showConfirmButton: false
   });
 }
 
@@ -16,11 +14,18 @@ export function showError(message) {
   Swal.fire({
     icon: 'error',
     title: 'Error',
+    text: message
+  });
+}
+
+export function showConfirm(message) {
+  return Swal.fire({
+    icon: 'warning',
+    title: '¿Estás seguro?',
     text: message,
-    position: 'top-end',
-    toast: true,
-    timer: 3000,
-    showConfirmButton: false
+    showCancelButton: true,
+    confirmButtonText: 'Sí, continuar',
+    cancelButtonText: 'Cancelar'
   });
 }
 
