@@ -7,28 +7,234 @@
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-      margin: 24px 0;
+    .search-container {
+      max-width: 800px;
+      margin: 0 auto 32px;
     }
 
-    .product-card {
-      background: var(--card-gradient);
+    .search-box {
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0, 59, 142, 0.15);
+      padding: 32px;
+      margin-bottom: 32px;
+      border: 1px solid rgba(0, 59, 142, 0.1);
+    }
+
+    .search-title {
+      text-align: center;
+      margin-bottom: 24px;
+      color: var(--primary-blue);
+    }
+
+    .search-title h2 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .search-title p {
+      color: #666;
+      font-size: 15px;
+    }
+
+    .search-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .search-field {
+      position: relative;
+    }
+
+    .search-field label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text-color);
+    }
+
+    .search-field select,
+    .search-field input {
+      width: 100%;
+      padding: 14px 16px;
       border-radius: 12px;
-      overflow: hidden;
-      padding: 20px;
+      border: 2px solid rgba(0, 59, 142, 0.1);
+      font-size: 15px;
+      transition: all 0.3s ease;
+      background: white;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .search-field select {
+      padding-right: 40px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23003B8E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 16px;
+    }
+
+    .search-field select:focus,
+    .search-field input:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(0, 59, 142, 0.1);
+    }
+
+    .search-button {
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      border: none;
+      background: var(--card-gradient);
       color: white;
+      font-weight: 500;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .search-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 59, 142, 0.2);
+    }
+
+    .search-results {
+      display: none;
+      background: white;
+      border-radius: 18px;
+      padding: 32px;
+      margin-top: 24px;
+      box-shadow: 0 8px 32px rgba(0, 59, 142, 0.15);
+      border: 1px solid rgba(0, 59, 142, 0.1);
+    }
+
+    .search-results.active {
+      display: block;
+    }
+
+    .result-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 24px;
+      padding: 24px;
+      border-bottom: 1px solid rgba(0, 59, 142, 0.1);
+      align-items: center;
       transition: all 0.3s ease;
     }
 
-    .product-card:hover {
+    .result-item:hover {
+      background: rgba(0, 59, 142, 0.02);
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-logo {
+      width: 100px;
+      height: 80px;
+      object-fit: contain;
+      background: white;
+      padding: 8px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .result-info h3 {
+      margin: 0 0 8px;
+      color: var(--primary-blue);
+      font-size: 18px;
+    }
+
+    .result-info p {
+      margin: 0 0 8px;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .result-features {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .result-feature {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .result-feature i {
+      color: var(--primary-blue);
+    }
+
+    .result-button {
+      padding: 10px 20px;
+      border-radius: 8px;
+      background: var(--card-gradient);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      text-align: center;
+      min-width: 120px;
+    }
+
+    .result-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 59, 142, 0.2);
+    }
+
+    .info-section {
+      background: white;
+      border-radius: 18px;
+      padding: 32px;
+      margin: 32px 0;
+      box-shadow: 0 8px 32px rgba(0, 59, 142, 0.15);
+      border: 1px solid rgba(0, 59, 142, 0.1);
+    }
+
+    .info-section h2 {
+      color: var(--primary-blue);
+      margin-bottom: 24px;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .feature-card {
+      padding: 24px;
+      background: var(--card-gradient);
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.3s ease;
+      color: white;
+    }
+
+    .feature-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 24px rgba(0, 59, 142, 0.2);
     }
 
-    .product-icon {
+    .feature-icon {
       font-size: 32px;
       margin-bottom: 16px;
       background: rgba(255, 255, 255, 0.1);
@@ -38,147 +244,37 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      margin: 0 auto 16px;
+      margin: 0 auto 20px;
     }
 
-    .product-title {
-      font-size: 20px;
-      font-weight: 600;
+    .feature-card h3 {
       margin-bottom: 12px;
-      text-align: center;
-    }
-
-    .product-description {
-      font-size: 14px;
-      opacity: 0.9;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .product-features {
-      list-style: none;
-      padding: 0;
-      margin: 16px 0;
-    }
-
-    .product-features li {
-      padding-left: 24px;
-      position: relative;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .product-features li::before {
-      content: "✓";
-      position: absolute;
-      left: 0;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .product-footer {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .product-price {
-      font-size: 18px;
-      font-weight: 600;
-    }
-
-    .contact-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: rgba(255, 255, 255, 0.1);
       color: white;
-      text-decoration: none;
-      border-radius: 20px;
+    }
+
+    .feature-card p {
+      color: rgba(255, 255, 255, 0.9);
       font-size: 14px;
-      transition: all 0.3s ease;
-    }
-
-    .contact-button:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .vehicle-types {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin: 24px 0;
-    }
-
-    .vehicle-type {
-      background: var(--card-gradient);
-      color: white;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .vehicle-type:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 24px rgba(0, 59, 142, 0.2);
-    }
-
-    .vehicle-icon {
-      font-size: 28px;
-      margin-bottom: 12px;
-    }
-
-    .vehicle-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .vehicle-description {
-      font-size: 13px;
-      opacity: 0.9;
-    }
-
-    .brands-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 16px;
-      margin: 24px 0;
-      align-items: center;
-    }
-
-    .brand-logo {
-      max-width: 80px;
-      height: auto;
-      margin: 0 auto;
-      opacity: 0.8;
-      transition: opacity 0.3s ease;
-      filter: brightness(0) invert(1);
-    }
-
-    .brand-logo:hover {
-      opacity: 1;
-    }
-
-    .compatibility-note {
-      text-align: center;
-      color: rgba(255, 255, 255, 0.8);
-      margin-top: 16px;
-      font-size: 13px;
+      line-height: 1.6;
     }
 
     @media (max-width: 768px) {
-      .product-grid {
+      .search-fields {
         grid-template-columns: 1fr;
       }
-      
-      .vehicle-types {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+
+      .result-item {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .result-logo {
+        margin: 0 auto;
+      }
+
+      .result-features {
+        justify-content: center;
+        flex-wrap: wrap;
       }
     }
   </style>
@@ -204,106 +300,214 @@
     <section class="hero">
       <div class="hero-content">
         <h1>Carcasas</h1>
-        <p>Repuestos originales y alternativos para vehículos</p>
+        <p>Encuentra la carcasa perfecta para tu vehículo</p>
       </div>
     </section>
 
     <section class="main-content">
       <div class="content-container">
-        <div class="vehicle-types">
-          <div class="vehicle-type">
-            <i class="fas fa-car vehicle-icon"></i>
-            <h3 class="vehicle-title">Automóviles</h3>
-            <p class="vehicle-description">Carcasas para todo tipo de autos</p>
+        <div class="search-container">
+          <div class="search-box">
+            <div class="search-title">
+              <h2>Buscador de Carcasas</h2>
+              <p>Selecciona tu vehículo para encontrar las carcasas compatibles</p>
+            </div>
+            <div class="search-fields">
+              <div class="search-field">
+                <label for="brandSelect">Marca</label>
+                <select id="brandSelect">
+                  <option value="">Seleccionar marca</option>
+                </select>
+              </div>
+              <div class="search-field">
+                <label for="modelSelect">Modelo</label>
+                <select id="modelSelect" disabled>
+                  <option value="">Seleccionar modelo</option>
+                </select>
+              </div>
+              <div class="search-field">
+                <label for="yearSelect">Año</label>
+                <select id="yearSelect" disabled>
+                  <option value="">Seleccionar año</option>
+                </select>
+              </div>
+            </div>
+            <button class="search-button" onclick="searchCases()">
+              <i class="fas fa-search"></i>
+              Buscar Carcasas Compatibles
+            </button>
           </div>
 
-          <div class="vehicle-type">
-            <i class="fas fa-motorcycle vehicle-icon"></i>
-            <h3 class="vehicle-title">Motos</h3>
-            <p class="vehicle-description">Carcasas para llaves de motos</p>
-          </div>
-
-          <div class="vehicle-type">
-            <i class="fas fa-truck vehicle-icon"></i>
-            <h3 class="vehicle-title">Camiones</h3>
-            <p class="vehicle-description">Carcasas para vehículos pesados</p>
+          <div class="search-results" id="searchResults">
+            <!-- Los resultados se mostrarán aquí -->
           </div>
         </div>
 
-        <div class="product-grid">
-          <div class="product-card">
-            <i class="fas fa-car-side product-icon"></i>
-            <h3 class="product-title">Carcasas Originales para Autos</h3>
-            <p class="product-description">Carcasas originales de fábrica para todas las marcas.</p>
-            <ul class="product-features">
-              <li>Material original certificado</li>
-              <li>Ajuste perfecto garantizado</li>
-              <li>Electrónica compatible</li>
-              <li>Garantía de fábrica</li>
-            </ul>
-            <div class="product-footer">
-              <div class="product-price">Desde $2.800</div>
-              <a href="/pages/contacto.html" class="contact-button">
-                <i class="fas fa-envelope"></i>
-                Consultar
-              </a>
+        <div class="info-section">
+          <h2>¿Por qué elegir nuestras carcasas?</h2>
+          <div class="features-grid">
+            <div class="feature-card">
+              <i class="fas fa-shield-alt feature-icon"></i>
+              <h3>Calidad Garantizada</h3>
+              <p>Carcasas originales y alternativas de la más alta calidad, con garantía de funcionamiento.</p>
+            </div>
+
+            <div class="feature-card">
+              <i class="fas fa-tools feature-icon"></i>
+              <h3>Instalación Profesional</h3>
+              <p>Servicio de instalación por técnicos certificados.</p>
+            </div>
+
+            <div class="feature-card">
+              <i class="fas fa-clock feature-icon"></i>
+              <h3>Servicio Express</h3>
+              <p>Reemplazo en el momento y servicio de urgencia disponible 24/7.</p>
+            </div>
+
+            <div class="feature-card">
+              <i class="fas fa-tag feature-icon"></i>
+              <h3>Precios Competitivos</h3>
+              <p>Mejores precios del mercado con opciones para todos los presupuestos.</p>
             </div>
           </div>
-
-          <div class="product-card">
-            <i class="fas fa-motorcycle product-icon"></i>
-            <h3 class="product-title">Carcasas para Motos</h3>
-            <p class="product-description">Carcasas específicas para llaves y mandos de motocicletas.</p>
-            <ul class="product-features">
-              <li>Compatibles con principales marcas</li>
-              <li>Resistentes al agua</li>
-              <li>Diseño ergonómico</li>
-              <li>Fácil instalación</li>
-            </ul>
-            <div class="product-footer">
-              <div class="product-price">Desde $1.900</div>
-              <a href="/pages/contacto.html" class="contact-button">
-                <i class="fas fa-envelope"></i>
-                Consultar
-              </a>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <i class="fas fa-truck product-icon"></i>
-            <h3 class="product-title">Carcasas para Camiones</h3>
-            <p class="product-description">Carcasas reforzadas para vehículos comerciales y de carga.</p>
-            <ul class="product-features">
-              <li>Material extra resistente</li>
-              <li>Diseño industrial</li>
-              <li>Protección contra golpes</li>
-              <li>Compatibilidad garantizada</li>
-            </ul>
-            <div class="product-footer">
-              <div class="product-price">Desde $3.500</div>
-              <a href="/pages/contacto.html" class="contact-button">
-                <i class="fas fa-envelope"></i>
-                Consultar
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card" style="margin-top: 24px;">
-          <h3 class="product-title">Marcas Compatibles</h3>
-          <div class="brands-grid">
-            <img src="https://via.placeholder.com/80x40?text=Toyota" alt="Toyota" class="brand-logo">
-            <img src="https://via.placeholder.com/80x40?text=VW" alt="Volkswagen" class="brand-logo">
-            <img src="https://via.placeholder.com/80x40?text=Honda" alt="Honda" class="brand-logo">
-            <img src="https://via.placeholder.com/80x40?text=Yamaha" alt="Yamaha" class="brand-logo">
-            <img src="https://via.placeholder.com/80x40?text=Scania" alt="Scania" class="brand-logo">
-            <img src="https://via.placeholder.com/80x40?text=Mercedes" alt="Mercedes" class="brand-logo">
-          </div>
-          <p class="compatibility-note">* Disponemos de carcasas para todas las marcas del mercado automotor</p>
         </div>
       </div>
     </section>
   </main>
+
+  <script>
+    // Datos de marcas y modelos
+    const brandsData = {
+      'Toyota': {
+        'Corolla': ['2020', '2021', '2022', '2023'],
+        'Camry': ['2019', '2020', '2021', '2022', '2023'],
+        'RAV4': ['2018', '2019', '2020', '2021', '2022', '2023'],
+        'Hilux': ['2018', '2019', '2020', '2021', '2022', '2023']
+      },
+      'Honda': {
+        'Civic': ['2019', '2020', '2021', '2022', '2023'],
+        'CR-V': ['2018', '2019', '2020', '2021', '2022', '2023'],
+        'Accord': ['2019', '2020', '2021', '2022', '2023']
+      },
+      'Volkswagen': {
+        'Golf': ['2018', '2019', '2020', '2021', '2022'],
+        'Polo': ['2019', '2020', '2021', '2022', '2023'],
+        'Amarok': ['2018', '2019', '2020', '2021', '2022']
+      }
+    };
+
+    // Llenar select de marcas
+    const brandSelect = document.getElementById('brandSelect');
+    Object.keys(brandsData).forEach(brand => {
+      const option = document.createElement('option');
+      option.value = brand;
+      option.textContent = brand;
+      brandSelect.appendChild(option);
+    });
+
+    // Manejar cambio de marca
+    brandSelect.addEventListener('change', () => {
+      const modelSelect = document.getElementById('modelSelect');
+      const yearSelect = document.getElementById('yearSelect');
+      const brand = brandSelect.value;
+
+      modelSelect.innerHTML = '<option value="">Seleccionar modelo</option>';
+      yearSelect.innerHTML = '<option value="">Seleccionar año</option>';
+
+      if (brand) {
+        modelSelect.disabled = false;
+        Object.keys(brandsData[brand]).forEach(model => {
+          const option = document.createElement('option');
+          option.value = model;
+          option.textContent = model;
+          modelSelect.appendChild(option);
+        });
+      } else {
+        modelSelect.disabled = true;
+        yearSelect.disabled = true;
+      }
+    });
+
+    // Manejar cambio de modelo
+    document.getElementById('modelSelect').addEventListener('change', () => {
+      const yearSelect = document.getElementById('yearSelect');
+      const brand = brandSelect.value;
+      const model = modelSelect.value;
+
+      yearSelect.innerHTML = '<option value="">Seleccionar año</option>';
+
+      if (model) {
+        yearSelect.disabled = false;
+        brandsData[brand][model].forEach(year => {
+          const option = document.createElement('option');
+          option.value = year;
+          option.textContent = year;
+          yearSelect.appendChild(option);
+        });
+      } else {
+        yearSelect.disabled = true;
+      }
+    });
+
+    // Función de búsqueda
+    function searchCases() {
+      const brand = brandSelect.value;
+      const model = modelSelect.value;
+      const year = yearSelect.value;
+
+      if (!brand || !model || !year) {
+        alert('Por favor, selecciona marca, modelo y año');
+        return;
+      }
+
+      const results = document.getElementById('searchResults');
+      results.innerHTML = `
+        <div class="result-item">
+          <img src="https://via.placeholder.com/100x80?text=${brand}" 
+               alt="${brand}" class="result-logo">
+          <div class="result-info">
+            <h3>Carcasa Original ${brand}</h3>
+            <p>Compatible con ${brand} ${model} ${year}</p>
+            <div class="result-features">
+              <span class="result-feature">
+                <i class="fas fa-check-circle"></i> Original de fábrica
+              </span>
+              <span class="result-feature">
+                <i class="fas fa-shield-alt"></i> Garantía 2 años
+              </span>
+              <span class="result-feature">
+                <i class="fas fa-tools"></i> Instalación incluida
+              </span>
+            </div>
+          </div>
+          <a href="/pages/contacto.html" class="result-button">Consultar</a>
+        </div>
+        
+        <div class="result-item">
+          <img src="https://via.placeholder.com/100x80?text=${brand}" 
+               alt="${brand}" class="result-logo">
+          <div class="result-info">
+            <h3>Carcasa Alternativa Premium</h3>
+            <p>Compatible con ${brand} ${model} ${year}</p>
+            <div class="result-features">
+              <span class="result-feature">
+                <i class="fas fa-star"></i> Alta calidad
+              </span>
+              <span class="result-feature">
+                <i class="fas fa-shield-alt"></i> Garantía 1 año
+              </span>
+              <span class="result-feature">
+                <i class="fas fa-percentage"></i> Mejor precio
+              </span>
+            </div>
+          </div>
+          <a href="/pages/contacto.html" class="result-button">Consultar</a>
+        </div>
+      `;
+      
+      results.classList.add('active');
+    }
+  </script>
 
   <script src="/main.js"></script>
 </body>

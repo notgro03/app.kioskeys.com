@@ -6,7 +6,6 @@ class LogoManager {
   constructor() {
     this.defaultLogo = 'https://ucarecdn.com/bdf174c8-8731-47fa-a3f9-2443689099be/logokioskey.png';
     this.currentLogo = this.loadLogo();
-    this.initializeWidget();
   }
 
   loadLogo() {
@@ -14,14 +13,17 @@ class LogoManager {
   }
 
   initializeWidget() {
-    const widget = uploadcare.Widget('[role=uploadcare-uploader]', {
+    const uploaderElement = document.querySelector('[role=uploadcare-uploader]');
+    if (!uploaderElement) return;
+
+    const widget = uploadcare.Widget(uploaderElement, {
       publicKey: '1985ca48f4d597426e30',
       tabs: 'file url',
       previewStep: true,
       clearable: true,
       multiple: false,
       imagesOnly: true,
-      crop: '16:9'
+      crop: '1:1'
     });
 
     widget.onUploadComplete((fileInfo) => {
@@ -32,6 +34,8 @@ class LogoManager {
       console.error('Upload failed:', error);
       showError('Error al subir el logo');
     });
+
+    return widget;
   }
 
   updateLogo(logoUrl) {
@@ -57,7 +61,7 @@ class LogoManager {
       return true;
     } catch (error) {
       console.error('Error updating logo:', error);
-      showError('Error al actualizar el logo');
+      showError(error.message || 'Error al actualizar el logo');
       return false;
     }
   }

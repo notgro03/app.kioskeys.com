@@ -3,6 +3,7 @@ import { brandsManager } from './brands-manager.js';
 import { productsManager } from './products-manager.js';
 import { plansManager } from './plans-manager.js';
 import { stateManager } from './state.js';
+import { initializeUploadcare } from './ui.js';
 
 export function initializeAdmin() {
   document.addEventListener('DOMContentLoaded', () => {
@@ -16,6 +17,8 @@ export function initializeAdmin() {
         logoManager.initializeWidget();
       };
       document.head.appendChild(script);
+    } else {
+      logoManager.initializeWidget();
     }
 
     // Apply current logo
