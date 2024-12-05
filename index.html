@@ -3,175 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panel de Administración - Kioskeys</title>
-  <link rel="stylesheet" href="/style.css">
+  <title>Panel de Administración - KiosKeys</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
   <style>
-    .admin-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
+    :root {
+      --primary-blue: #007BFF; /* Define color si no está */
     }
 
-    .admin-nav {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 30px;
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
     }
-
-    .admin-nav a {
-      padding: 10px 20px;
-      border-radius: 5px;
-      color: var(--primary-blue);
-      text-decoration: none;
-      transition: all 0.3s ease;
+    
+    nav .logo img {
+      max-height: 50px;
     }
-
-    .admin-nav a:hover,
-    .admin-nav a.active {
-      background: var(--primary-blue);
-      color: white;
-    }
-
-    .admin-section {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 500;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
-
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-      background: var(--primary-blue);
-      color: white;
-    }
-
-    .btn-danger {
-      background: #dc3545;
-      color: white;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .brand-card {
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      position: relative;
-    }
-
-    .brand-logo {
-      width: 100%;
-      height: 150px;
-      object-fit: contain;
-      margin-bottom: 10px;
-      border-radius: 5px;
-    }
-
-    .brand-info {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .brand-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    .edit-btn,
-    .delete-btn {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .edit-btn {
-      background: var(--primary-blue);
-      color: white;
-    }
-
-    .delete-btn {
-      background: #dc3545;
-      color: white;
-    }
-
-    .preview-image {
-      width: 100%;
-      max-width: 200px;
-      height: auto;
-      margin: 10px 0;
-      border-radius: 5px;
-    }
-
-    #brandsList {
-      margin-top: 30px;
-    }
-
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .section-title h2 {
-      margin: 0;
-      color: var(--primary-blue);
-    }
+    
+    /* Otros estilos heredados */
   </style>
 </head>
 <body>
-  <nav>
-    <div class="logo">
-      <a href="/"><img src="/logo.svg" alt="Kioskeys" data-logo></a>
-    </div>
-    <div class="nav-links">
-      <a href="/">Inicio</a>
-      <a href="/admin" class="active">Panel Admin</a>
-    </div>
-  </nav>
+  <header>
+    <nav aria-label="Main navigation">
+      <div class="logo">
+        <a href="/"><img src="/assets/images/logo.svg" alt="KiosKeys Logo"></a>
+      </div>
+      <div class="nav-links">
+        <a href="/">Inicio</a>
+        <a href="/admin" class="active">Panel Admin</a>
+      </div>
+    </nav>
+  </header>
 
   <main>
     <section class="hero">
@@ -182,7 +47,7 @@
     </section>
 
     <div class="admin-container">
-      <nav class="admin-nav">
+      <nav class="admin-nav" aria-label="Subnavigation">
         <a href="#brands" class="active" data-section="brands">Marcas</a>
         <a href="#products" data-section="products">Productos</a>
         <a href="#categories" data-section="categories">Categorías</a>
@@ -193,101 +58,75 @@
         <div class="section-title">
           <h2>Gestión de Marcas</h2>
         </div>
-        
         <form id="brandForm">
           <input type="hidden" name="id">
-          
           <div class="form-group">
-            <label>Logo de la Marca</label>
+            <label for="brandLogo">Logo de la Marca</label>
             <input type="hidden" role="uploadcare-uploader" data-images-only="true">
             <input type="hidden" name="logo" id="brandLogo">
-            <img id="logoPreview" src="/placeholder-logo.png" class="preview-image">
+            <img id="logoPreview" src="/assets/images/placeholder-logo.png" class="preview-image" alt="Logo Preview">
           </div>
-
           <div class="form-group">
-            <label>Nombre de la Marca</label>
-            <input type="text" name="name" required>
+            <label for="brandName">Nombre de la Marca</label>
+            <input type="text" name="name" id="brandName" required>
           </div>
-
           <div class="form-group">
-            <label>Tipo</label>
-            <select name="type" required>
+            <label for="brandType">Tipo</label>
+            <select name="type" id="brandType" required>
               <option value="car">Automóvil</option>
               <option value="motorcycle">Motocicleta</option>
               <option value="commercial">Comercial</option>
             </select>
           </div>
-
           <button type="submit" class="btn btn-primary">
             <i class="fas fa-save"></i> Guardar Marca
           </button>
         </form>
-
         <div id="brandsList" class="grid">
-          <!-- Brands will be rendered here -->
+          <!-- Las marcas se renderizan aquí -->
         </div>
       </section>
 
-      <section id="products" class="admin-section" style="display: none;">
+      <section id="products" class="admin-section" hidden>
         <div class="section-title">
           <h2>Gestión de Productos</h2>
         </div>
-        <!-- Products content -->
       </section>
 
-      <section id="categories" class="admin-section" style="display: none;">
-        <div class="section-title">
-          <h2>Gestión de Categorías</h2>
-        </div>
-        <!-- Categories content -->
-      </section>
-
-      <section id="settings" class="admin-section" style="display: none;">
-        <div class="section-title">
-          <h2>Configuración</h2>
-        </div>
-        <!-- Settings content -->
-      </section>
+      <!-- Otras secciones -->
     </div>
   </main>
 
   <script type="module">
-    import { BrandsManager } from '../src/admin/js/brands.js';
-    import { db } from '../src/admin/js/db.js';
+    import { BrandsManager } from '/src/admin/js/brands.js';
+    import { db } from '/src/admin/js/db.js';
 
-    // Initialize database and managers
     document.addEventListener('DOMContentLoaded', async () => {
       try {
         await db.open();
         window.brandsManager = new BrandsManager();
 
-        // Handle navigation
         const navLinks = document.querySelectorAll('.admin-nav a');
         const sections = document.querySelectorAll('.admin-section');
 
         navLinks.forEach(link => {
           link.addEventListener('click', (e) => {
             e.preventDefault();
-            
-            // Update active state
             navLinks.forEach(l => l.classList.remove('active'));
             link.classList.add('active');
-
-            // Show selected section
             const sectionId = link.getAttribute('href').substring(1);
             sections.forEach(section => {
-              section.style.display = section.id === sectionId ? 'block' : 'none';
+              section.hidden = section.id !== sectionId;
             });
           });
         });
-
       } catch (error) {
-        console.error('Error initializing admin panel:', error);
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: 'Error al inicializar el panel de administración'
         });
+        console.error('Error:', error);
       }
     });
   </script>
