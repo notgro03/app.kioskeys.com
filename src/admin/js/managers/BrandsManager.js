@@ -1,6 +1,6 @@
 import { brandsAPI } from '../api/brands.js';
-import { showSuccess, showError, showConfirm } from '../ui.js';
-import { UPLOADCARE_CONFIG } from '../config.js';
+import { showSuccess, showError, showConfirm } from '../../ui.js';
+import { UPLOADCARE_CONFIG } from '../../config.js';
 
 export class BrandsManager {
   constructor() {
