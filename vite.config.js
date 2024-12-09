@@ -27,7 +27,8 @@ export default defineConfig({
         'llaves': resolve(__dirname, 'pages/llaves.html'),
         'carcasas': resolve(__dirname, 'pages/carcasas.html'),
         'accesorios': resolve(__dirname, 'pages/accesorios.html'),
-        'admin': resolve(__dirname, 'pages/admin/index.html')
+        'admin': resolve(__dirname, 'pages/admin/index.html'),
+        'admin-login': resolve(__dirname, 'pages/admin/login.html')
       },
       output: {
         entryFileNames: 'assets/[name]-[hash].js',
