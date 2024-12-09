@@ -75,27 +75,6 @@
           <!-- Brands will be rendered here -->
         </div>
       </section>
-
-      <section id="products" class="admin-section" style="display: none;">
-        <div class="section-title">
-          <h2>Gestión de Productos</h2>
-        </div>
-        <!-- Products content -->
-      </section>
-
-      <section id="categories" class="admin-section" style="display: none;">
-        <div class="section-title">
-          <h2>Gestión de Categorías</h2>
-        </div>
-        <!-- Categories content -->
-      </section>
-
-      <section id="settings" class="admin-section" style="display: none;">
-        <div class="section-title">
-          <h2>Configuración</h2>
-        </div>
-        <!-- Settings content -->
-      </section>
     </div>
   </main>
 
@@ -108,27 +87,6 @@
       try {
         await db.open();
         window.brandsManager = new BrandsManager();
-
-        // Handle navigation
-        const navLinks = document.querySelectorAll('.admin-nav a');
-        const sections = document.querySelectorAll('.admin-section');
-
-        navLinks.forEach(link => {
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            // Update active state
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-
-            // Show selected section
-            const sectionId = link.getAttribute('href').substring(1);
-            sections.forEach(section => {
-              section.style.display = section.id === sectionId ? 'block' : 'none';
-            });
-          });
-        });
-
       } catch (error) {
         console.error('Error initializing admin panel:', error);
         Swal.fire({
