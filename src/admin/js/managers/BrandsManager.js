@@ -1,5 +1,6 @@
-import { brandsAPI } from './db.js';
-import { showSuccess, showError } from './ui.js';
+import { brandsAPI } from '../api/brands.js';
+import { showSuccess, showError, showConfirm } from '../ui.js';
+import { UPLOADCARE_CONFIG } from '../config.js';
 
 export class BrandsManager {
   constructor() {
@@ -16,11 +17,7 @@ export class BrandsManager {
     // Initialize Uploadcare widget
     const uploader = document.querySelector('[role=uploadcare-uploader]');
     if (uploader) {
-      const widget = uploadcare.Widget(uploader, {
-        publicKey: '1985ca48f4d597426e30',
-        imagesOnly: true,
-        crop: '1:1'
-      });
+      const widget = uploadcare.Widget(uploader, UPLOADCARE_CONFIG);
 
       widget.onUploadComplete((fileInfo) => {
         document.getElementById('brandLogo').value = fileInfo.cdnUrl;
@@ -81,6 +78,7 @@ export class BrandsManager {
       }
       
       e.target.reset();
+      document.getElementById('logoPreview').src = '/placeholder-logo.png';
       this.loadBrands();
     } catch (error) {
       showError('Error al guardar la marca');
@@ -104,7 +102,8 @@ export class BrandsManager {
   }
 
   async deleteBrand(id) {
-    if (!confirm('¿Estás seguro de que deseas eliminar esta marca?')) return;
+    const result = await showConfirm('¿Estás seguro de que deseas eliminar esta marca?');
+    if (!result.isConfirmed) return;
 
     try {
       await brandsAPI.delete(id);
@@ -116,6 +115,3 @@ export class BrandsManager {
     }
   }
 }
-
-// Initialize brands manager
-window.brandsManager = new BrandsManager();

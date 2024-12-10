@@ -1,7 +1,13 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import legacy from '@vitejs/plugin-legacy'
 
 export default defineConfig({
+  plugins: [
+    legacy({
+      targets: ['defaults', 'not IE 11']
+    })
+  ],
   build: {
     outDir: 'dist',
     rollupOptions: {
@@ -21,17 +27,15 @@ export default defineConfig({
         'llaves': resolve(__dirname, 'pages/llaves.html'),
         'carcasas': resolve(__dirname, 'pages/carcasas.html'),
         'accesorios': resolve(__dirname, 'pages/accesorios.html'),
-        'admin': resolve(__dirname, 'pages/admin/kioskeys-admin-x7k9y2.html')
+        'admin': resolve(__dirname, 'pages/admin/index.html'),
+        'admin-login': resolve(__dirname, 'pages/admin/login.html')
       }
     }
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-      '@admin': resolve(__dirname, 'src/admin')
+      '@': resolve(__dirname, './src'),
+      '@admin': resolve(__dirname, './src/admin')
     }
-  },
-  server: {
-    open: true
   }
 })
