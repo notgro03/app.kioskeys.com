@@ -1,10 +1,14 @@
 import Dexie from 'dexie';
-import { DB_CONFIG } from './config.js';
 
 // Create database
-const db = new Dexie(DB_CONFIG.name);
+const db = new Dexie('kioskeysDB');
 
 // Define schema
-db.version(DB_CONFIG.version).stores(DB_CONFIG.stores);
+db.version(1).stores({
+  brands: '++id, name, type, logo',
+  products: '++id, name, brandId, category, price, description, image',
+  categories: '++id, name, description',
+  settings: 'key, value'
+});
 
 export { db };

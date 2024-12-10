@@ -29,11 +29,6 @@ export default defineConfig({
         'accesorios': resolve(__dirname, 'pages/accesorios.html'),
         'admin': resolve(__dirname, 'pages/admin/index.html'),
         'admin-login': resolve(__dirname, 'pages/admin/login.html')
-      },
-      output: {
-        entryFileNames: 'assets/[name]-[hash].js',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     }
   },

@@ -7,8 +7,7 @@
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
-  <link rel="stylesheet" href="/src/admin/css/admin.css">
+  <script type="module" src="/src/admin/js/main.js"></script>
 </head>
 <body>
   <nav>
@@ -18,6 +17,9 @@
     <div class="nav-links">
       <a href="/">Inicio</a>
       <a href="/admin" class="active">Panel Admin</a>
+      <button data-logout class="logout-button">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
     </div>
   </nav>
 
@@ -31,10 +33,10 @@
 
     <div class="admin-container">
       <nav class="admin-nav">
-        <a href="#brands" class="active" data-section="brands">Marcas</a>
-        <a href="#products" data-section="products">Productos</a>
-        <a href="#categories" data-section="categories">Categorías</a>
-        <a href="#settings" data-section="settings">Configuración</a>
+        <a href="#brands" class="active">Marcas</a>
+        <a href="#products">Productos</a>
+        <a href="#categories">Categorías</a>
+        <a href="#settings">Configuración</a>
       </nav>
 
       <section id="brands" class="admin-section">
@@ -77,25 +79,5 @@
       </section>
     </div>
   </main>
-
-  <script type="module">
-    import { BrandsManager } from '/src/admin/js/managers/BrandsManager.js';
-    import { db } from '/src/admin/js/db.js';
-
-    // Initialize database and managers
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        await db.open();
-        window.brandsManager = new BrandsManager();
-      } catch (error) {
-        console.error('Error initializing admin panel:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Error al inicializar el panel de administración'
-        });
-      }
-    });
-  </script>
 </body>
 </html>
